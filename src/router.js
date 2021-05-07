@@ -37,9 +37,19 @@ const router = new Router({
           component: () => import('./views/document_pages/documentList.vue')
         },
         {
-          path: '/user',
+          path: '/user/:username',
           name: 'user',
           component: () => import('./views/user_pages/userProfile.vue')
+        },
+        {
+          path: '/document/:docID',
+          name: 'document',
+          component: () => import('./views/document_pages/documentData.vue')
+        },
+        {
+          path: '/departments',
+          name: 'departments',
+          component: () => import('./views/departments/departments.vue')
         }
       ]
     },

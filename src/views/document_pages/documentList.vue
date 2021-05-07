@@ -8,144 +8,197 @@
       
       <vs-table max-items="5" search pagination :data="all_documents">
         <template slot="header">
-          <vs-button @click="active=!active" style="border-radius:5px;" color="primary" type="filled" icon="event_note">Add Document</vs-button>
+          <vs-button @click="popupActivo=true" style="border-radius:5px;" color="primary" type="filled" icon="event_note">Add Document</vs-button>
         </template>
-        <div slot="thead" class="grid grid-cols-7 gap-4">
-          <vs-th sort-key="name" style="flex-grow:1">
+        <div slot="thead" class="grid grid-cols-8 gap-4">
+          <vs-th sort-key="_id" style="flex-grow:1">
+            Document ID
+          </vs-th>
+          <vs-th sort-key="title" style="flex-grow:1">
             Title
           </vs-th>
-          <vs-th sort-key="username" style="flex-grow:1"> 
+          <vs-th sort-key="created_by_user" style="flex-grow:1"> 
             Created By
           </vs-th>
-          <vs-th  sort-key="username" style="flex-grow:1"> 
-            From
+          <vs-th  sort-key="created_by_department" style="flex-grow:1"> 
+            From Dep
           </vs-th>
-          <vs-th sort-key="department" style="flex-grow:1">
-            To
-          </vs-th>
-          <vs-th sort-key="role" style="flex-grow:1">
-            Date Created  
-          </vs-th>
-          <vs-th sort-key="status" style="flex-grow:1">
+          <vs-th sort-key="target_user" style="flex-grow:1">
             Forwarded To  
           </vs-th>
-          <vs-th sort-key="role" style="flex-grow:1">
+          <vs-th sort-key="target_department" style="flex-grow:1">
             Forwarded Dep  
+          </vs-th>
+          <vs-th sort-key="target_department" style="flex-grow:1">
+            Date Created  
+          </vs-th>
+          <vs-th sort-key="role" style="flex-grow:1">
+            Actions  
           </vs-th>
         </div>
 
         <div slot-scope="{data}">
-          <vs-tr :state="tr.role == 'Super Admin'?'success':tr.role == 'Admin'?'primary':null" :key="indextr" v-for="(tr, indextr) in data" class="grid grid-cols-7 gap-4">
+          <vs-tr :state="tr.role == 'Super Admin'?'success':tr.role == 'Admin'?'primary':null" :key="indextr" v-for="(tr, indextr) in data" class="grid grid-cols-8 gap-4">
+            <vs-td :data="data[indextr]._id">
+              {{data[indextr]._id}}
+            </vs-td>
             <vs-td :data="data[indextr].title">
               {{data[indextr].title}}
             </vs-td>
 
-            <vs-td :data="tr.createdBy.user">
-              {{tr.createdBy.user}}
+            <vs-td :data="tr.created_by_user">
+              {{tr.created_by_user}}
             </vs-td>
 
-            <vs-td :data="data[indextr].from">
-              {{data[indextr].from}} 
+            <vs-td :data="tr.created_by_department">
+              {{tr.created_by_department}} 
             </vs-td>
 
-            <vs-td :data="data[indextr].to">
-              {{data[indextr].to}}
+            <vs-td :data="tr.target_user">
+              {{tr.target_user}}
             </vs-td>
 
-            <vs-td :data="data[indextr].date_created">
-              {{data[indextr].date_created}}
+            <vs-td :data="tr.target_department">
+              {{tr.target_department}}
             </vs-td>
 
-            <vs-td :data="data[indextr].forwarded_to.user">
-              {{data[indextr].forwarded_to.user}}
+            <vs-td :data="tr.date_created">
+              {{tr.date_created}}
             </vs-td>
-
-            <vs-td :data="data[indextr].forwarded_to.department">
-              {{data[indextr].forwarded_to.department}}
+            <vs-td>
+                <div>
+                  <router-link :to="{name: 'document', params: {docID: tr._id}}">
+                    <vs-button radius size="large" line-position="left" color="success" type="flat" icon="edit"></vs-button>
+                  </router-link>
+                </div>
             </vs-td>
           </vs-tr>
         </div>
       </vs-table>
     </div>
     <div class="parentx">
-      <vs-sidebar position-right parent="body" default-index="1"  color="primary" class="sidebarx" spacer v-model="active">
-
-      <div class="header-sidebar" slot="header">
-        <p class="text-2xl">Add User</p>
-
-      </div>
-
-      <vs-sidebar-item index="1">
-          <b-form>
+      <vs-popup class="holamundo"  title="Add User" :active.sync="popupActivo">
+          <b-form @submit.stop.prevent>
             <b-form-group
               class="text-xl"
-              id="Name"
-              label="Full Name"
-              label-for="name"
-              description="Please write your full name here."
+              id="Title"
+              label="Title"
+              label-for="title"
             >
               <b-form-input
-                id="name"
-                v-model="name"
+                id="title"
+                v-model="title"
                 type="text"
-                placeholder="John Doe"
                 required
               ></b-form-input>
             </b-form-group>
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                 <b-form-group
+                    class="text-xl"
+                    id="DocID"
+                    label="ID"
+                    label-for="docID"
+                    description="ID of the document, must be between 4-6 numerics."
+                  >
+                    <b-form-input
+                      id="docID"
+                      v-model="docID"
+                      type="text"
+                      placeholder="0000"
+                      required
+                    ></b-form-input>
+                  </b-form-group>
+              </div>
+              <div>
+                <vs-button @click="genRandNum" style="border-radius:5px;  margin: 2rem auto; float: right"  color="primary" type="flat">Gen Random ID</vs-button>
+              </div>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+              <div>
 
-            <b-form-group
-              class="text-xl"
-              id="UName"
-              label="Username"
-              label-for="username"
-              description="Write a unique username here."
-            >
-              <b-form-input
-                id="username"
-                v-model="username"
-                type="text"
-                placeholder="John123"
-                required
-              ></b-form-input>
-            </b-form-group>
+                 <b-form-group
+                    class="text-xl"
+                    id="CreatedBy"
+                    label="Created By"
+                    label-for="frmUser"
+                    description="Name of person creating the document."
+                  >
+                    <b-form-input
+                      id="frmUser"
+                      v-model="frmUser"
+                      type="text"
+                      placeholder="John123"
+                      required
+                    ></b-form-input>
+                  </b-form-group>
 
-            <b-form-group
-              class="text-xl"
-              id="Department"
-              label="Department"
-              label-for="department"
-            >
-              <b-form-select
-                id="departmet"
-                v-model="department"
-                :options="departments"
-                required
-              ></b-form-select>
-            </b-form-group>
+                  <b-form-group
+                    class="text-xl"
+                    id="ForwardedTo"
+                    label="Forwarded To"
+                    label-for="targetUser"
+                    description="Name of the final destination person."
+                  >
+                    <b-form-input
+                      id="targetUser"
+                      v-model="targetUser"
+                      type="text"
+                      placeholder="Steven Smith"
+                      required
+                    ></b-form-input>
+                  </b-form-group>
 
-            <b-form-group
-              class="text-xl"
-              id="Role"
-              label="Role"
-              label-for="role"
-            >
-              <b-form-select
-                id="role"
-                v-model="role"
-                :options="roles"
-                required
-              ></b-form-select>
-            </b-form-group>
+              </div>
+              <div>
+                <b-form-group
+                  class="text-xl"
+                  id="FromDep"
+                  label="From Department"
+                  label-for="frmDep"
+                  description="Name of the department document created from."
+                >
+                  <b-form-input
+                    id="frmDep"
+                    v-model="frmDep"
+                    type="text"
+                    placeholder="Computer Science"
+                    required
+                  ></b-form-input>
+                </b-form-group>
+
+                <b-form-group
+                  class="text-xl"
+                  id="ForwardDep"
+                  label="Target Department"
+                  label-for="targetDep"
+                  description="Name of the target department."
+                >
+                  <b-form-input
+                    id="targetDep"
+                    v-model="targetDep"
+                    type="text"
+                    required
+                  ></b-form-input>
+                </b-form-group>
+
+              </div>
+            </div>
+            <div>
+            <b-form-textarea
+              id="textarea"
+              v-model="dsc"
+              placeholder="Enter description..."
+              rows="1"
+              max-rows="6"
+            ></b-form-textarea>
+
+            <pre class="mt-3 mb-0">{{ text }}</pre>
+          </div>
           </b-form>
-      </vs-sidebar-item>
 
-      
-
-      <div class="footer-sidebar" slot="footer">
-        <vs-button @click="onSubmit" style="border-radius:5px; margin:5em auto;" icon="add" color="warning" type="flat">Add</vs-button>
-      </div>
-
-    </vs-sidebar>
+        <vs-button @click="onSubmit" style="border-radius:5px; margin: 1em auto;" icon="add" color="warning" type="flat">Add</vs-button>
+      </vs-popup>
     </div>
   </div>
 </template>
@@ -160,31 +213,40 @@ components: {
 },
 data:()=>({
     selected:false,
-    departments : [
-      "BBA", "CS", "Applied Physics", "Electrical Engineering"
-    ],
-    roles : [
-      "Admin", "Super Admin", "DTO"
-    ],
-    active: false,
-    name: '',
-    username:'',
-    department:null,
-    role: '',
+    popupActivo: false,
+    docID : "",
+    title: "",
+    frmUser: "",
+    frmDep: "",
+    targetUser: "",
+    targetDep: "",
+    dsc: "",
     all_documents:[],
   }),
   methods: {
-    onSubmit: function(e) {
-      e.preventDefault()
-      var newUser = {
-        id: "10",
-        name: this.name,
-        username: this.username,
-        department: this.department,
-        role: this.role
+    genRandNum: function() {
+      var lenX = 2;
+      while (lenX < 5){
+          var x = Math.floor((Math.random() * 100000) + 1);
+          var lenX = x.toString().length;
       }
-      this.users.push(newUser)
-
+      document.getElementById("docID").value = x;
+    },
+    onSubmit: async function(e) {
+      e.preventDefault()
+      var newDocument = {
+        _id: this.docID,
+        title: this.title,
+        created_by_user: this.frmUser,
+        created_by_department: this.frmDep,
+        target_user: this.targetUser,
+        target_department: this.targetDep,
+        description: this.dsc,
+      }
+      this.all_documents.push(newDocument)
+      this.popupActivo = false
+      const response = await axios.post('http://localhost:5000/api/documents', newDocument)
+      console.log(response.data.msg)
     },
     get_all_documents: async function() {
       const res = await axios.get('http://localhost:5000/api/documents')

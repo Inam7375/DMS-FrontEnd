@@ -16,15 +16,21 @@ export default [
     icon: "HomeIcon",
   },
   {
-    url: 'users',
+    url: '/users',
     name: "Users",
     slug: "users",
     icon: "UserIcon",
   },
   {
-    url: 'documents',
+    url: '/documents',
     name: "Documents",
     slug: "documents",
     icon: "ClipboardIcon",
+  },
+  {
+    url: '/departments',
+    name: "Departments",
+    slug: "departments",
+    icon: "LayoutIcon",
   }
 ]

@@ -8,14 +8,14 @@
       
       <vs-table max-items="5" search pagination :data="all_users">
         <template slot="header">
-          <vs-button @click="active=!active" style="border-radius:5px;" color="primary" type="filled" icon="person_add">Add User</vs-button>
+          <vs-button @click="popupActivo=true" style="border-radius:5px;" color="primary" type="filled" icon="person_add">Add User</vs-button>
         </template>
         <div slot="thead" class="grid grid-cols-7 gap-4">
           <vs-th sort-key="name" style="flex-grow:1">
             Full Name
           </vs-th>
           <vs-th sort-key="username" style="flex-grow:1"> 
-            Name
+            User Name
           </vs-th>
           <vs-th  sort-key="username" style="flex-grow:1" 
             Avatar
@@ -67,7 +67,9 @@
             <vs-td :data="data[indextr].role">
               <div class="grid grid-cols-2">
                 <div>
-                  <vs-button radius size="large" line-position="left" color="success" type="flat" icon="edit"></vs-button>
+                  <router-link :to="{name: 'user', params: {username: tr._id}}">
+                    <vs-button radius size="large" line-position="left" color="success" type="flat" icon="edit"></vs-button>
+                  </router-link>
                 </div>
                 <div>
                   <vs-button radius size="large" color="danger" type="flat" icon="delete"></vs-button>
@@ -79,130 +81,142 @@
       </vs-table>
     </div>
     <div class="parentx">
-      <vs-sidebar position-right parent="body" default-index="1"  color="primary" class="sidebarx" spacer v-model="active">
+      <vs-popup class="holamundo"  title="Add User" :active.sync="popupActivo">
+          <b-form @submit.stop.prevent>
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                 <b-form-group
+                    class="text-xl"
+                    id="Username"
+                    label="Username"
+                    label-for="username"
+                    description="Write a unique username here."
+                  >
+                    <b-form-input
+                      id="username"
+                      v-model="username"
+                      type="text"
+                      placeholder="John123"
+                      required
+                    ></b-form-input>
+                  </b-form-group>
 
-      <div class="header-sidebar" slot="header">
-        <p class="text-2xl">Add User</p>
+                  <b-form-group
+                    class="text-xl"
+                    id="Email"
+                    label="Email"
+                    label-for="email"
+                    description="Enter a valid email here."
+                  >
+                    <b-form-input
+                      id="email"
+                      v-model="email"
+                      type="email"
+                      placeholder="someone@gmail.com"
+                      required
+                    ></b-form-input>
+                  </b-form-group>
 
-      </div>
+                  <b-form-group
+                    class="text-xl"
+                    id="Password"
+                    label="Password"
+                    label-for="password"
+                    description="Enter a 8-12 characters long password."
+                  >
+                    <b-form-input
+                      :state="validatePass"
+                      id="password"
+                      v-model="password"
+                      type="password"
+                      required
+                    ></b-form-input>
+                  </b-form-group>
 
-      <vs-sidebar-item index="1">
-          <b-form>
-            <b-form-group
-              class="text-xl"
-              id="Name"
-              label="Full Name"
-              label-for="name"
-              description="Please write your full name here."
-            >
-              <b-form-input
-                id="name"
-                v-model="name"
-                type="text"
-                placeholder="John Doe"
-                required
-              ></b-form-input>
-            </b-form-group>
+                  <b-form-group
+                    class="text-xl"
+                    id="Department"
+                    label="Department"
+                    label-for="department"
+                  >
+                    <b-form-select
+                      id="departmet"
+                      v-model="department"
+                      :options="departments"
+                      required
+                    ></b-form-select>
+                  </b-form-group>
 
-            <b-form-group
-              class="text-xl"
-              id="UName"
-              label="Username"
-              label-for="username"
-              description="Write a unique username here."
-            >
-              <b-form-input
-                id="username"
-                v-model="username"
-                type="text"
-                placeholder="John123"
-                required
-              ></b-form-input>
-            </b-form-group>
+              </div>
+              <div>
+                <b-form-group
+                  class="text-xl"
+                  id="Name"
+                  label="Name"
+                  label-for="name"
+                  description="Enter user's full name here."
+                >
+                  <b-form-input
+                    id="name"
+                    v-model="name"
+                    type="text"
+                    placeholder="John Doe"
+                    required
+                  ></b-form-input>
+                </b-form-group>
 
-            <b-form-group
-              class="text-xl"
-              id="Email"
-              label="Email"
-              label-for="email"
-              description="Write a valid email here."
-            >
-              <b-form-input
-                id="email"
-                v-model="email"
-                type="email"
-                placeholder="someone@gmail.com"
-                required
-              ></b-form-input>
-            </b-form-group>
-            
-            <b-form-group
-              class="text-xl"
-              id="Password"
-              label="Password"
-              label-for="password"
-              description="Enter a 6-10  characters long password."
-            >
-              <b-form-input
-                id="password"
-                v-model="password"
-                type="password"
-                required
-              ></b-form-input>
-            </b-form-group>
+                <b-form-group
+                  class="text-xl"
+                  id="Designation"
+                  label="Designation"
+                  label-for="designation"
+                  description="Enter a designation here."
+                >
+                  <b-form-input
+                    id="designation"
+                    v-model="designation"
+                    type="text"
+                    placeholder="Professor"
+                    required
+                  ></b-form-input>
+                </b-form-group>
 
-            <b-form-group
-              class="text-xl"
-              id="Password2"
-              label="Re-enter Password"
-              label-for="password2"
-              description="Re enter your password."
-            >
-              <b-form-input
-                id="password2"
-                v-model="password2"
-                type="password"
-                required
-              ></b-form-input>
-            </b-form-group>
+                <b-form-group
+                  class="text-xl"
+                  id="Password2"
+                  label="Re-Enter Password"
+                  label-for="password2"
+                  description="Cofirm password."
+                >
+                  <b-form-input
+                    :state="confirmPass"
+                    id="password2"
+                    v-model="password2"
+                    type="password"
+                    required
+                  ></b-form-input>
+                </b-form-group>
 
-            <b-form-group
-              class="text-xl"
-              id="Department"
-              label="Department"
-              label-for="department"
-            >
-              <b-form-select
-                id="departmet"
-                v-model="department"
-                :options="departments"
-                required
-              ></b-form-select>
-            </b-form-group>
+                <b-form-group
+                  class="text-xl"
+                  id="Role"
+                  label="Role"
+                  label-for="role"
+                >
+                  <b-form-select
+                    id="role"
+                    v-model="role"
+                    :options="roles"
+                    required
+                  ></b-form-select>
+                </b-form-group>
 
-            <b-form-group
-              class="text-xl"
-              id="Role"
-              label="Role"
-              label-for="role"
-            >
-              <b-form-select
-                id="role"
-                v-model="role"
-                :options="roles"
-                required
-              ></b-form-select>
-            </b-form-group>
+              </div>
+            </div>
           </b-form>
-      </vs-sidebar-item>
 
-      
-
-      <div class="footer-sidebar" slot="footer">
-        <vs-button @click="onSubmit" style="border-radius:5px; margin:5em auto;" icon="add" color="warning" type="flat">Add</vs-button>
-      </div>
-
-    </vs-sidebar>
+        <vs-button @click="onSubmit" style="border-radius:5px; margin: 1em auto;" icon="add" color="warning" type="flat">Add</vs-button>
+      </vs-popup>
     </div>
   </div>
 </template>
@@ -223,28 +237,33 @@ data:()=>({
     roles : [
       "Admin", "Super Admin", "DTO"
     ],
-    active: false,
+    popupActivo: false,
     name: '',
     username:'',
-    department:null,
-    role: '',
     email: '',
+    designation:'',
     password: '',
     password2: '',
+    department:null,
+    role: '',
     all_users:[],
   }),
   methods: {
-    onSubmit: function(e) {
+    onSubmit: async function(e) {
       e.preventDefault()
       var newUser = {
-        id: "10",
         name: this.name,
         username: this.username,
+        email: this.email,
+        password: this.password2,
+        designation: this.designation,
         department: this.department,
-        role: this.role
+        role: this.role 
       }
-      this.users.push(newUser)
-
+      this.all_users.push(newUser) 
+      this.popupActivo = false
+      const response = await axios.post('http://localhost:5000/api/user/KT1', newUser)
+      console.log(response.data.msg)
     },
     toggleStatus: function(status, index) {
       this.users[index].status = !status
@@ -254,8 +273,28 @@ data:()=>({
       this.all_users = res.data.results
     } ,
     ...mapActions(['fetchUsers'])
+    // validateFields : function() {
+    //   return true ?
+    //     this.name.length > 0 &&
+    //     this.username.length > 0 &&
+    //     this.email.length > 0
+    //   : false
+    //     this.departments.length > 0 &&
+    //     this.designation.length > 0 &&
+    //     this.role.length > 0 &&
+    //     this.validatePass &&
+    //     this.confirmPass
+    // },
   },
-  computed : mapGetters(['allUsers']),
+  computed : {
+    ...mapGetters(['allUsers']),
+    validatePass() {
+      return this.password.length > 7 && this.password.length < 13
+    },
+    confirmPass () {
+      return this.password2 === this.password && this.password2.length > 0
+    },
+    },
   created() {
     this.fetchUsers()
     this.get_all_users()
