@@ -82,7 +82,9 @@ export default{
         username: this.username,
         password: this.password
       })
-      this.$router.push('/')
+      this.$router.push({name: 'home'}).catch(error => {
+          console.info(error.message)
+      })
     }
   }
 }

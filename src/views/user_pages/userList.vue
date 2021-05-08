@@ -5,7 +5,12 @@
         <p class="text-3xl">Users List</p>
         <p>You can search registered users here.</p>
       </vx-card>
-      
+      <vs-alert :active="showSuccess" color="success" icon="new_releases" >
+        <span><b>User</b> inserted succesfuly.</span>
+      </vs-alert>
+      <vs-alert :active="showAlert" color="warning" icon="new_releases" >
+        <span>The <b>user</b> already exists.</span>
+      </vs-alert>
       <vs-table max-items="5" search pagination :data="all_users">
         <template slot="header">
           <vs-button @click="popupActivo=true" style="border-radius:5px;" color="primary" type="filled" icon="person_add">Add User</vs-button>
@@ -93,7 +98,7 @@
                     description="Write a unique username here."
                   >
                     <b-form-input
-                      id="username"
+                       id="username"
                       v-model="username"
                       type="text"
                       placeholder="John123"
@@ -238,6 +243,8 @@ data:()=>({
       "Admin", "Super Admin", "DTO"
     ],
     popupActivo: false,
+    showAlert: false,
+    showSuccess: false,
     name: '',
     username:'',
     email: '',
@@ -251,19 +258,26 @@ data:()=>({
   methods: {
     onSubmit: async function(e) {
       e.preventDefault()
+      this.showAlert = false
+      this.showSuccess = false
       var newUser = {
         name: this.name,
-        username: this.username,
+        _id: this.username,
         email: this.email,
         password: this.password2,
         designation: this.designation,
         department: this.department,
         role: this.role 
       }
-      this.all_users.push(newUser) 
-      this.popupActivo = false
       const response = await axios.post('http://localhost:5000/api/user/KT1', newUser)
-      console.log(response.data.msg)
+      if (response.status == 422){
+        this.showAlert = !this.showAlert
+      }else{
+          this.showSuccess = !this.showSuccess
+          this.all_users.push(newUser) 
+          this.popupActivo = false
+          console.log(response.data.msg)
+      }
     },
     toggleStatus: function(status, index) {
       this.users[index].status = !status
@@ -272,19 +286,22 @@ data:()=>({
       const res = await axios.get('http://localhost:5000/api/users')
       this.all_users = res.data.results
     } ,
-    ...mapActions(['fetchUsers'])
+    ...mapActions(['fetchUsers']),
     // validateFields : function() {
-    //   return true ?
+    //   if(
     //     this.name.length > 0 &&
     //     this.username.length > 0 &&
-    //     this.email.length > 0
-    //   : false
+    //     this.email.length > 0 &&
     //     this.departments.length > 0 &&
     //     this.designation.length > 0 &&
     //     this.role.length > 0 &&
     //     this.validatePass &&
     //     this.confirmPass
-    // },
+    //   ){
+    //     return true
+    //   }else{
+    //     false
+    //   }
   },
   computed : {
     ...mapGetters(['allUsers']),
