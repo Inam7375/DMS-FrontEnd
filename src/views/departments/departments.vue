@@ -4,7 +4,7 @@
             <vs-button @click="popupActivo=true" style="border-radius:5px" color="primary" type="filled">Add Document</vs-button>
         </div><br>
         <div class="grid grid-cols-3 gap-4">
-            <vx-card :key="item._id" v-for="item in allDepartments">
+            <vx-card :key="item._id" v-for="(item, index) in allDepartments">
                 <div class="grid grid-cols-5">
                     <div>
                         Name : <br>
@@ -18,7 +18,7 @@
                     </div>
                     <div class="col-start-5 grid grid-cols-2">
                         <div>
-                            <vs-button  @click="active=!active" radius size="large" line-position="left" color="success" type="flat" icon="edit"></vs-button>
+                            <vs-button  @click="event(item._id, index)" radius size="large" line-position="left" color="success" type="flat" icon="edit"></vs-button>
                         </div>
                         <div>
                             <vs-button radius size="large" color="danger" type="flat" icon="delete"></vs-button>
@@ -95,6 +95,7 @@
                     >
                     <b-form-input
                         id="depName"
+                        disabled
                         v-model="depName"
                         type="text"
                         placeholder="Computer Science"
@@ -138,7 +139,7 @@
 
             </b-form>
             <div class="footer-sidebar" slot="footer">
-                <vs-button @click="onSubmitUpdate" style="border-radius:5px; margin: 1em auto;" icon="add" color="warning" type="flat">Add</vs-button>
+                <vs-button @click="onSubmitUpdate(index)" style="border-radius:5px; margin: 1em auto;" icon="add" color="warning" type="flat">Update</vs-button>
             </div>
         </vs-sidebar>
     </div>
@@ -158,9 +159,15 @@ export default {
         depName: "",
         depHOD: "",
         about: "",
+        index: null,
         allDepartments: []
     }),
     methods: {
+        event: function(department, index){
+            this.active = !this.active
+            this.depName = department
+            this.index = index
+        },
         getAllDepartments: async function(){
             const res = await axios.get("http://localhost:5000/api/departments")
             this.allDepartments = res.data.results
@@ -175,6 +182,19 @@ export default {
             this.allDepartments.push(newDepartment)
             this.popupActivo = false
             const res = await axios.post("http://localhost:5000/api/departments", newDepartment)
+            console.log(res.data.msg)
+        },
+        onSubmitUpdate : async function(index){
+            var newDepartment = {
+                _id: this.depName,
+                depHOD: this.depHOD,
+                about: this.about
+            }
+            console.log(index)
+            this.allDepartments[index].depHOD = this.depHOD
+            this.allDepartments[index].about = this.about
+            this.active = false
+            const res = await axios.put("http://localhost:5000/api/departments", newDepartment)
             console.log(res.data.msg)
         }
     },

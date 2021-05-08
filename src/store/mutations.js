@@ -117,7 +117,12 @@ const mutations = {
     // Store data in localStorage
     localStorage.setItem("userInfo", JSON.stringify(userInfo))
   },
-
+  getToken(state, token){
+    state.token = token
+  },
+  remToken(state, token){
+    state.token = null
+  }
 }
 
 export default mutations

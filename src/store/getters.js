@@ -15,6 +15,9 @@ const getters = {
   allUsers : (state) => {
     state.users
   },
+  loggedIn : (state) => {
+    return state.token !== null
+  },
 	// COMPONENT
 		// vx-autosuggest
 	// starredPages: state => state.navbarSearchAndPinList.data.filter((page) => page.highlightAction),
