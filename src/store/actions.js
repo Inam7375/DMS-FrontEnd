@@ -8,6 +8,7 @@
 ==========================================================================================*/
 import axios from 'axios';
 import { reject } from 'core-js/fn/promise';
+import route from '../router.js'
 
 const actions = {
 
@@ -64,7 +65,7 @@ const actions = {
           try{
             localStorage.removeItem('access-token')
             commit('remToken')
-            resolve()
+            return true
           }
           catch (error){
             localStorage.removeItem('access-token')
@@ -84,6 +85,7 @@ const actions = {
         try{
           localStorage.setItem('access-token', token)
           commit('getToken', token)
+          route.push('/')
           resolve(res)
         }
         catch(error) {

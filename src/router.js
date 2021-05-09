@@ -30,6 +30,14 @@ const router = new Router({
           }
         },
         {
+          path: '/practicce',
+          name: 'practice',
+          component: () => import('./views/practice.vue'),
+          meta:{
+            requiresVisitor: true
+          }
+        },
+        {
           path: '/users',
           name: 'users',
           component: () => import('./views/user_pages/userList.vue'),

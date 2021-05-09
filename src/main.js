@@ -64,8 +64,8 @@ Vue.use(Vuesax)
 
 
 // axios
-import axios from './axios.js'
-Vue.prototype.$http = axios
+// import axios from './axios.js'
+// Vue.prototype.$http = axios
 
 // Theme Configurations
 import '../themeConfig.js'

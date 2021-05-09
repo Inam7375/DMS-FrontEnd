@@ -76,13 +76,12 @@ export default{
     }
   },
   methods: {
-    login : function(){
+    login : async function(){
       
       this.$store.dispatch('retrieveToken', {
         username: this.username,
         password: this.password
       })
-      this.$router.push('/')
     }
   }
 }

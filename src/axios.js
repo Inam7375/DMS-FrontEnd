@@ -1,6 +1,5 @@
 // axios
 import axios from 'axios'
-import Vue from 'vue'
  
 
 axios.defaults.headers.common['x-access-token'] = localStorage.getItem('access-token')
