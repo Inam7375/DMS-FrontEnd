@@ -7,7 +7,7 @@
   Author URL: http://www.themeforest.net/user/pixinvent
 ==========================================================================================*/
 import axios from 'axios';
-import { reject } from 'core-js/fn/promise';
+import router from '../router.js'
 
 const actions = {
 
@@ -84,6 +84,7 @@ const actions = {
         try{
           localStorage.setItem('access-token', token)
           commit('getToken', token)
+          router.push('/')
           resolve(res)
         }
         catch(error) {
