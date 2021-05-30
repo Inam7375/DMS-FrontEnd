@@ -11,6 +11,7 @@
 import Vue from 'vue'
 import App from './App.vue'
 
+
 // Vue Vue-Boostrap Framework
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 

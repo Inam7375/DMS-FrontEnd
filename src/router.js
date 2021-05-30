@@ -46,6 +46,14 @@ const router = new Router({
           }
         },
         {
+          path: '/documentsTest',
+          name: 'documentsTest',
+          component: () => import('./views/document_pages/otherDocs.vue'),
+          meta:{
+            requiresAuth: true
+          }
+        },
+        {
           path: '/user/:username',
           name: 'user',
           component: () => import('./views/user_pages/userProfile.vue'),

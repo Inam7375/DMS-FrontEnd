@@ -12,15 +12,17 @@
 
       <component :is="scrollbarTag" ref="mainSidebarPs" class="scroll-area--nofications-dropdown p-0 mb-10" :settings="settings" :key="$vs.rtl">
         <ul class="bordered-items">
-          <li v-for="ntf in unreadNotifications" :key="ntf.index" class="flex justify-between px-4 py-4 notification cursor-pointer">
-            <div class="flex items-start">
-              <feather-icon :icon="ntf.icon" :svgClasses="[`text-${ntf.category}`, 'stroke-current mr-1 h-6 w-6']"></feather-icon>
-              <div class="mx-2">
-                <span class="font-medium block notification-title" :class="[`text-${ntf.category}`]">{{ ntf.title }}</span>
-                <small>{{ ntf.msg }}</small>
+          <li v-for="(ntf, index) in unreadNotifications" :key="index" class="flex justify-between px-4 py-4 notification cursor-pointer">              
+            <router-link :to="{name: 'document', params: {docID: ntf.docID}}">
+              <div class="flex items-start">
+                <feather-icon :icon="ntf.icon" :svgClasses="[`text-${ntf.category}`, 'stroke-current mr-1 h-6 w-6']"></feather-icon>
+                <div class="mx-2">
+                  <span class="font-medium block notification-title" :class="[`text-${ntf.category}`]">{{ ntf.title }}</span>
+                  <small>{{ ntf.msg }}</small>
+                </div>
               </div>
-            </div>
-            <small class="mt-1 whitespace-no-wrap">{{ elapsedTime(ntf.time) }}</small>
+            </router-link>
+              <small class="mt-1 whitespace-no-wrap">{{ elapsedTime(ntf.time) }}</small>
           </li>
         </ul>
       </component>
@@ -50,6 +52,9 @@
 
 <script>
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
+import VueJwtDecode from 'vue-jwt-decode';
+import axios from 'axios';
+
 
 export default {
   components: {
@@ -95,6 +100,7 @@ export default {
           category : 'warning'
         }
       ],
+      payloadUname : "",
       settings: {
         maxScrollbarLength: 60,
         wheelSpeed: .60
@@ -105,6 +111,13 @@ export default {
     scrollbarTag () { return this.$store.getters.scrollbarTag }
   },
   methods: {
+    async getNotifications() {
+      const payload = VueJwtDecode.decode(localStorage.getItem('access-token'))
+      this.payloadUname = payload['username']
+      const response = await axios.get(`http://localhost:5000/api/usernotify/${this.payloadUname}`)
+      this.unreadNotifications = response.data.results
+      console.log(this.unreadNotifications)
+    },
     elapsedTime (startTime) {
       const x        = new Date(startTime)
       const now      = new Date()
@@ -149,6 +162,9 @@ export default {
 
       return date
     }
+  },
+  created(){
+    this.getNotifications()
   }
 }
 

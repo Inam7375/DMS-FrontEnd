@@ -18,7 +18,9 @@
           <li
             class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white">
             <feather-icon icon="UserIcon" svgClasses="w-4 h-4" />
-            <router-link to="/users"><span class="ml-2">Profile</span></router-link>
+            <router-link :to="{name: 'user', params: {username: payloadUname}}">
+              <span class="ml-2">Profile</span>
+            </router-link>
           </li>
 
           <li
@@ -54,10 +56,11 @@
 </template>
 
 <script>
+import VueJwtDecode from 'vue-jwt-decode';
 export default {
   data () {
     return {
-
+      payloadUname : ""
     }
   },
   computed: {
@@ -75,6 +78,10 @@ export default {
       // This is just for demo Purpose. If user clicks on logout -> redirect
       this.$router.push('/pages/login').catch(() => {})
     }
+  },
+  created() {
+    const payload = VueJwtDecode.decode(localStorage.getItem('access-token'))
+    this.payloadUname = payload['username']
   }
 }
 </script>

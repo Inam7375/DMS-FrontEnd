@@ -117,11 +117,16 @@ const mutations = {
     // Store data in localStorage
     localStorage.setItem("userInfo", JSON.stringify(userInfo))
   },
-  getToken(state, token){
+  getToken(state, token, isAdmin){
     state.token = token
+    state.isAdmin = isAdmin
   },
   remToken(state, token){
     state.token = null
+    state.isAdmin = null
+  },
+  shiftCreator(state){
+    state.isCreator = !state.isCreator
   }
 }
 
