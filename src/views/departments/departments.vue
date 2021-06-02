@@ -1,7 +1,7 @@
 <template>
     <div>
         <div style="margin-bottom: 1em">
-            <vs-button @click="popupActivo=true" style="border-radius:5px" color="primary" type="filled">Add Document</vs-button>
+            <vs-button @click="popupActivo=true" style="border-radius:5px" color="primary" type="filled">Add Department</vs-button>
         </div><br>
         <div class="grid grid-cols-3 gap-4">
             <vx-card :key="item._id" v-for="(item, index) in allDepartments">

@@ -17,12 +17,12 @@
           <vs-th sort-key="username" style="flex-grow:1"> 
             User Name
           </vs-th>
-          <vs-th  sort-key="username" style="flex-grow:1" 
+          <vs-th  sort-key="avatar" style="flex-grow:1">
             Avatar
           </vs-th>
-          <vs-th sort-key="role" style="flex-grow:1">
+          <!-- <vs-th sort-key="role" style="flex-grow:1">
             Avatar 
-          </vs-th>
+          </vs-th> -->
           <vs-th sort-key="department" style="flex-grow:2">
             Department
           </vs-th>
@@ -42,7 +42,7 @@
             <vs-td :data="data[indextr].name">
               {{data[indextr].name}}
             </vs-td>
-
+         
             <vs-td :data="data[indextr]._id">
               {{data[indextr]._id}} 
             </vs-td>
@@ -140,7 +140,7 @@
                     label-for="department"
                   >
                     <b-form-select
-                      id="departmet"
+                      id="department"
                       v-model="department"
                       :options="departments"
                       required
