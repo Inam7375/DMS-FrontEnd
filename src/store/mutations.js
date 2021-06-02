@@ -16,7 +16,10 @@ const mutations = {
   // /////////////////////////////////////////////
   
   //Getting users
-  getUsers(state, users) { state.users = users },
+  getUsers(state, users) { 
+    state.users = users
+    
+   },
   // Vertical NavMenu
 
   TOGGLE_IS_VERTICAL_NAV_MENU_ACTIVE(state, value) {

@@ -38,12 +38,12 @@
         </div>
 
         <div slot-scope="{data}">
-          <vs-tr :state="tr.role == 'Super Admin'?'success':tr.role == 'Admin'?'primary':null" :key="indextr" v-for="(tr, indextr) in data" class="grid grid-cols-7 gap-4">
-            <vs-td :data="data[indextr].name">
+          <vs-tr :state="tr.role == 'Super Admin'?'success':tr.role == 'Admin'?'primary':null" :key="tr._id" v-for="(tr, indextr) in data" class="grid grid-cols-7 gap-4">
+            <vs-td >
               {{data[indextr].name}}
             </vs-td>
 
-            <vs-td :data="data[indextr]._id">
+            <vs-td>
               {{data[indextr]._id}} 
             </vs-td>
 
@@ -51,20 +51,20 @@
               <vs-avatar/> 
             </vs-td>
 
-            <vs-td :data="data[indextr].department">
+            <vs-td >
               {{data[indextr].department}}
             </vs-td>
 
-            <vs-td :data="data[indextr].role">
+            <vs-td >
               {{data[indextr].role}}
             </vs-td>
-            <vs-td :data="data[indextr].status">
+            <vs-td >
               <vs-chip :color="tr.status ? 'primary' : 'danger'">
                 <vs-avatar @click='toggleStatus(tr.status, indextr)'  icon="edit" />
                 {{data[indextr].status ? "active" : "not active" }}
               </vs-chip>
             </vs-td>
-            <vs-td :data="data[indextr].role">
+            <vs-td >
               <div class="grid grid-cols-2">
                 <div>
                   <router-link :to="{name: 'user', params: {username: tr._id}}">
@@ -271,23 +271,12 @@ data:()=>({
     get_all_users: async function() {
       const res = await axios.get('http://localhost:5000/api/users')
       this.all_users = res.data.results
-    } ,
-    ...mapActions(['fetchUsers'])
-    // validateFields : function() {
-    //   return true ?
-    //     this.name.length > 0 &&
-    //     this.username.length > 0 &&
-    //     this.email.length > 0
-    //   : false
-    //     this.departments.length > 0 &&
-    //     this.designation.length > 0 &&
-    //     this.role.length > 0 &&
-    //     this.validatePass &&
-    //     this.confirmPass
-    // },
+    },
+    ...mapActions(['fetchUsers']),
   },
   computed : {
     ...mapGetters(['allUsers']),
+
     validatePass() {
       return this.password.length > 7 && this.password.length < 13
     },

@@ -31,9 +31,9 @@
 
           <!-- Logo -->
           <router-link tag="div" class="vx-logo cursor-pointer flex items-center" to="/">
-            <img src="../FUUAST.png" style="width:5em; height:3em; margin:0px auto" alt="FUUAST">
+            <img src="../logo.png" style="width:5em; height:3em; margin:0px auto" alt="FUUAST">
             <!-- <logo class="w-10 mr-4 fill-current text-primary" /> -->
-            <!-- <span class="vx-logo-text text-primary" v-show="isMouseEnter || !reduce" v-if="title">{{ title }}</span> -->
+            <span class="vx-logo-text text-primary ml-2"> FUUAST DMS </span>
           </router-link>
           <!-- /Logo -->
 
