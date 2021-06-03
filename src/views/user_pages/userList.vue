@@ -42,13 +42,8 @@
             <vs-td >
               {{data[indextr].name}}
             </vs-td>
-<<<<<<< HEAD
          
             <vs-td :data="data[indextr]._id">
-=======
-
-            <vs-td>
->>>>>>> a0aeff5138eb89e424ac799742e878b126f1e5fe
               {{data[indextr]._id}} 
             </vs-td>
 
@@ -252,10 +247,11 @@ data:()=>({
     department:null,
     role: '',
     all_users:[],
+     
   }),
   methods: {
-    onSubmit: async function(e) {
-      e.preventDefault()
+    onSubmit: async function() {
+      // e.preventDefault()
       var newUser = {
         name: this.name,
         username: this.username,
@@ -267,8 +263,21 @@ data:()=>({
       }
       this.all_users.push(newUser) 
       this.popupActivo = false
-      const response = await axios.post('http://localhost:5000/api/user/KT1', newUser)
-      console.log(response.data.msg)
+      const response=axios({ 
+      method: 'post', 
+      url: 'http://localhost:5000/api/user/abc', 
+      body: newUser, 
+      headers: {
+        'Content-Type': 'application/json'
+      }
+      }) 
+      // header: { 'Content-Type' : 'application/json' }
+      // const response = await axios.post('http://localhost:5000/api/user/KT1',newUser,{
+      //    headers: {
+      //       'Content-Type': 'application/json',
+      //   }
+      // })
+      console.log(response)
     },
     toggleStatus: function(status, index) {
       this.users[index].status = !status
@@ -278,9 +287,12 @@ data:()=>({
       this.all_users = res.data.results
     },
     ...mapActions(['fetchUsers']),
+    
   },
   computed : {
     ...mapGetters(['allUsers']),
+     
+   
 
     validatePass() {
       return this.password.length > 7 && this.password.length < 13
@@ -294,6 +306,7 @@ data:()=>({
     this.get_all_users()
   }
 }
+
 </script>
 
 <style lang="scss">

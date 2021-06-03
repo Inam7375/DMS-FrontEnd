@@ -13,7 +13,7 @@
 const getters = {
 
   allUsers : (state) => {
-    state.users
+   return state.users
   },
   loggedIn : (state) => {
     return state.token !== null

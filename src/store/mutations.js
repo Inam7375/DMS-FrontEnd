@@ -18,7 +18,7 @@ const mutations = {
   //Getting users
   getUsers(state, users) { 
     state.users = users
-    
+    console.log(users)
    },
   // Vertical NavMenu
 
