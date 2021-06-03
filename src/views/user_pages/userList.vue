@@ -1,4 +1,5 @@
 <template lang="html">
+
   <div>
     <div>
       <vx-card style="margin-bottom: 2em;">
@@ -94,7 +95,7 @@
                   >
                     <b-form-input
                       id="username"
-                      v-model="username"
+                      v-model="un"
                       type="text"
                       placeholder="John123"
                       required
@@ -222,91 +223,81 @@
 </template>
 
 <script>
-import VxCard from '../../components/vx-card/VxCard.vue';
-import {mapGetters, mapActions} from 'vuex';
-import axios from 'axios';
+import VxCard from "../../components/vx-card/VxCard.vue";
+import { mapGetters, mapActions } from "vuex";
+import axios from "axios";
 export default {
-components: {
-  VxCard,
-},
-data:()=>({
-    selected:false,
-    departments : [
-      "BBA", "CS", "Applied Physics", "Electrical Engineering"
-    ],
-    roles : [
-      "Admin", "Super Admin", "DTO"
-    ],
+  components: {
+    VxCard,
+  },
+  data: () => ({
+    selected: false,
+    departments: ["BBA", "CS", "Applied Physics", "Electrical Engineering"],
+    roles: ["Admin", "Super Admin", "DTO"],
     popupActivo: false,
-    name: '',
-    username:'',
-    email: '',
-    designation:'',
-    password: '',
-    password2: '',
-    department:null,
-    role: '',
-    all_users:[],
-     
+    name: "",
+    un: "",
+    email: "",
+    designation: "",
+    password: "",
+    password2: "",
+    department: null,
+    role: "",
+    all_users: [],
   }),
   methods: {
-    onSubmit: async function() {
+    onSubmit: async function () {
       // e.preventDefault()
       var newUser = {
         name: this.name,
-        username: this.username,
+        un: this.un,
         email: this.email,
-        password: this.password2,
+        password: this.password,
         designation: this.designation,
         department: this.department,
-        role: this.role 
-      }
-      this.all_users.push(newUser) 
-      this.popupActivo = false
-      const response=axios({ 
-      method: 'post', 
-      url: 'http://localhost:5000/api/user/abc', 
-      body: newUser, 
-      headers: {
-        'Content-Type': 'application/json'
-      }
-      }) 
-      // header: { 'Content-Type' : 'application/json' }
-      // const response = await axios.post('http://localhost:5000/api/user/KT1',newUser,{
-      //    headers: {
-      //       'Content-Type': 'application/json',
-      //   }
+        role: this.role,
+      };
+      this.all_users.push(newUser);
+      this.popupActivo = false;
+      // const response=axios({
+      // method: 'post',
+      // url: 'http://localhost:5000/api/user/abc',
+      // body: newUser,
+      // headers: {
+      //   'Content-Type': 'application/json'
+      // }
       // })
-      console.log(response)
+
+      const response = await axios.post(
+        "http://localhost:5000/api/user/KT1",
+        newUser
+      );
+      console.log(response.data.msg);
     },
-    toggleStatus: function(status, index) {
-      this.users[index].status = !status
+    toggleStatus: function (status, index) {
+      this.users[index].status = !status;
     },
-    get_all_users: async function() {
-      const res = await axios.get('http://localhost:5000/api/users')
-      this.all_users = res.data.results
+    get_all_users: async function () {
+      const res = await axios.get("http://localhost:5000/api/users");
+      this.all_users = res.data.results;
     },
-    ...mapActions(['fetchUsers']),
-    
+    ...mapActions(["fetchUsers"]),
   },
-  computed : {
-    ...mapGetters(['allUsers']),
-     
-   
+  computed: {
+    ...mapGetters(["allUsers"]),
 
     validatePass() {
-      return this.password.length > 7 && this.password.length < 13
+      return this.password.length > 7 && this.password.length < 13;
     },
-    confirmPass () {
-      return this.password2 === this.password && this.password2.length > 0
+    confirmPass() {
+      return this.password2 === this.password && this.password2.length > 0;
     },
-    },
+  },
   created() {
-    this.fetchUsers()
-    this.get_all_users()
-  }
-}
-
+    this.fetchUsers();
+    this.get_all_users();
+  },
+};
 </script>
 
 <style lang="scss">
@@ -314,16 +305,16 @@ b-form-input :focus {
   background-color: #101639;
 }
 
-.labelx, .vs-input
-{  
-  margin : 10px;
+.labelx,
+.vs-input {
+  margin: 10px;
 }
-.vs-input{
+.vs-input {
   line-height: 1em;
   width: 100%;
   font-size: 2em;
 }
-.sidebarx{
+.sidebarx {
   position: fixed;
   z-index: 50000;
 }
