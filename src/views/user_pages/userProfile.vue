@@ -16,7 +16,8 @@
                 >
                   <b-form-input
                     id="username"
-                    v-model="username"
+                    disabled
+                    v-model="un"
                     type="text"
                     placeholder="John123"
                     required
@@ -172,7 +173,7 @@ export default {
     roles: ["Admin", "Super Admin", "DTO"],
     popupActivo: false,
     name: "",
-    username: "",
+    un: "",
     email: "",
     designation: "",
     password: "",
@@ -186,7 +187,7 @@ export default {
       e.preventDefault();
       var updateUser = {
         name: this.name,
-        username: this.username,
+        // un: this.un,
         email: this.email,
         password: this.password2,
         designation: this.designation,

@@ -70,7 +70,7 @@
                 max-rows="6"
                 ></b-form-textarea>
 
-                <pre class="mt-3 mb-0">{{ text }}</pre>
+                <!-- <pre class="mt-3 mb-0">{{ text }}</pre> -->
 
           </b-form>
 
