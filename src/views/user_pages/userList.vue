@@ -1,4 +1,5 @@
 <template lang="html">
+
   <div>
     <div>
       <vx-card style="margin-bottom: 2em;">
@@ -94,7 +95,7 @@
                   >
                     <b-form-input
                       id="username"
-                      v-model="username"
+                      v-model="un"
                       type="text"
                       placeholder="John123"
                       required
@@ -140,7 +141,7 @@
                     label-for="department"
                   >
                     <b-form-select
-                      id="departmet"
+                      id="department"
                       v-model="department"
                       :options="departments"
                       required
@@ -239,7 +240,7 @@ data:()=>({
     ],
     popupActivo: false,
     name: '',
-    username:'',
+    un:'',
     email: '',
     designation:'',
     password: '',
@@ -249,13 +250,13 @@ data:()=>({
     all_users:[],
   }),
   methods: {
-    onSubmit: async function(e) {
-      e.preventDefault()
+    onSubmit: async function() {
+      // e.preventDefault(e)
       var newUser = {
         name: this.name,
-        username: this.username,
+        un: this.un,
         email: this.email,
-        password: this.password2,
+        password: this.password,
         designation: this.designation,
         department: this.department,
         role: this.role 

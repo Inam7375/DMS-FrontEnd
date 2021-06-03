@@ -5,5 +5,5 @@ tailwind.config.js
 tailwind-v0.js
 docs/*
 src/main.js
-src/*
-/* eslint-disable */
+
+
