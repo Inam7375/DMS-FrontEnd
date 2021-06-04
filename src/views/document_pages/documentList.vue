@@ -13,10 +13,8 @@
         </div>
       </vx-card>
       <vs-tabs :color="colorx"  alignment="fixed" >
-        <vs-tab @click="colorx = 'rgb(16, 233, 179)'" label="My Documents">
           <div class="con-tab-ejemplo">
-          <vs-tabs :color="colorx2"  alignment="fixed" >
-            <vs-tab @click="colorx2 = 'rgb(16, 233, 179)'" label="Created Documents">
+            <vs-tab @click="colorx = '#0984e3'" label="Created Documents">
               <div class="con-tab-ejemplo">
                 
                 <vs-table max-items="5" search pagination :data="all_documents">
@@ -87,7 +85,7 @@
                 </vs-table>
               </div>
             </vs-tab>
-            <vs-tab @click="colorx2 = 'warning'" label="Completed Documents">
+            <vs-tab @click="colorx = 'success'" label="Completed Documents">
               <div class="con-tab-ejemplo">
                 
                 <vs-table max-items="5" search pagination :data="all_documents_completed">
@@ -158,14 +156,7 @@
                 </vs-table>
               </div>
             </vs-tab>
-          </vs-tabs>
-          </div>
-        </vs-tab>
-
-        <vs-tab @click="colorx = 'warning'" label="Others Documents">
-          <div class="con-tab-ejemplo">
-          <vs-tabs :color="colorx2"  alignment="fixed" >
-            <vs-tab @click="colorx2 = 'rgb(16, 233, 179)'" label="Pending">
+            <vs-tab @click="colorx = 'warning'" label="Pending">
               <div class="con-tab-ejemplo">
                 
                 <vs-table max-items="5" search pagination :data="all_documents_pending">
@@ -236,81 +227,10 @@
                 </vs-table>
               </div>
             </vs-tab>
-            <vs-tab @click="colorx2 = 'warning'" label="Pending">
-              <div class="con-tab-ejemplo">
-                
-                <vs-table max-items="5" search pagination :data="all_documents">
-                  <div slot="thead" class="grid grid-cols-8 gap-4">
-                    <vs-th sort-key="_id" style="flex-grow:1">
-                      Document ID
-                    </vs-th>
-                    <vs-th sort-key="title" style="flex-grow:1">
-                      Title
-                    </vs-th>
-                    <vs-th sort-key="created_by_user" style="flex-grow:1"> 
-                      Created By
-                    </vs-th>
-                    <vs-th  sort-key="created_by_department" style="flex-grow:1"> 
-                      From Dep
-                    </vs-th>
-                    <vs-th sort-key="target_user" style="flex-grow:1">
-                      Forwarded To  
-                    </vs-th>
-                    <vs-th sort-key="target_department" style="flex-grow:1">
-                      Forwarded Dep  
-                    </vs-th>
-                    <vs-th sort-key="target_department" style="flex-grow:1">
-                      Date Created  
-                    </vs-th>
-                    <vs-th sort-key="role" style="flex-grow:1">
-                      Actions  
-                    </vs-th>
-                  </div>
-
-                  <div slot-scope="{data}">
-                    <vs-tr :state="tr.role == 'Super Admin'?'success':tr.role == 'Admin'?'primary':null" :key="indextr" v-for="(tr, indextr) in data" class="grid grid-cols-8 gap-4">
-                      <vs-td :data="data[indextr]._id">
-                        {{data[indextr]._id}}
-                      </vs-td>
-                      <vs-td :data="data[indextr].title">
-                        {{data[indextr].title}}
-                      </vs-td>
-
-                      <vs-td :data="tr.created_by_user">
-                        {{tr.created_by_user}}
-                      </vs-td>
-
-                      <vs-td :data="tr.created_by_department">
-                        {{tr.created_by_department}} 
-                      </vs-td>
-
-                      <vs-td :data="tr.target_user">
-                        {{tr.target_user}}
-                      </vs-td>
-
-                      <vs-td :data="tr.target_department">
-                        {{tr.target_department}}
-                      </vs-td>
-
-                      <vs-td :data="tr.date_created">
-                        {{tr.date_created}}
-                      </vs-td>
-                      <vs-td>
-                          <div>
-                            <router-link :to="{name: 'document', params: {docID: tr._id}}">
-                              <vs-button radius size="large" line-position="left" color="success" type="flat" icon="edit"></vs-button>
-                            </router-link>
-                          </div>
-                      </vs-td>
-                    </vs-tr>
-                  </div>
-                </vs-table>
-              </div>
-            </vs-tab>
-          </vs-tabs>
           </div>
-        </vs-tab>
-      </vs-tabs>
+
+            
+        </vs-tabs>
     </div>
     <div class="parentx">
       <vs-popup class="holamundo"  title="Add User" :active.sync="popupActivo">
@@ -430,8 +350,7 @@ components: {
 data:()=>({
     selected:false,
     popupActivo: false,
-    colorx: 'rgb(16, 233, 179)',
-    colorx2: 'rgb(16, 233, 179)',
+    colorx: '#0984e3',
     payloadUname: "",
     docID : "",
     title: "",
@@ -472,8 +391,10 @@ data:()=>({
         description: this.dsc,
       }
       this.all_documents.push(newDocument)
+      console.log(newDocument['_id'])
       this.popupActivo = false
       const response = await axios.post('http://localhost:5000/api/documents', newDocument)
+      console.log(response.data.msg)
     },
 
     get_all_documents: async function() {
