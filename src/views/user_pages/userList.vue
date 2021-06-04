@@ -1,4 +1,5 @@
 <template lang="html">
+
   <div>
     <div>
       <vx-card style="margin-bottom: 2em;">
@@ -17,12 +18,12 @@
           <vs-th sort-key="username" style="flex-grow:1"> 
             User Name
           </vs-th>
-          <vs-th  sort-key="username" style="flex-grow:1" 
+          <vs-th  sort-key="avatar" style="flex-grow:1">
             Avatar
           </vs-th>
-          <vs-th sort-key="role" style="flex-grow:1">
+          <!-- <vs-th sort-key="role" style="flex-grow:1">
             Avatar 
-          </vs-th>
+          </vs-th> -->
           <vs-th sort-key="department" style="flex-grow:2">
             Department
           </vs-th>
@@ -38,11 +39,11 @@
         </div>
 
         <div slot-scope="{data}">
-          <vs-tr :state="tr.role == 'Super Admin'?'success':tr.role == 'Admin'?'primary':null" :key="indextr" v-for="(tr, indextr) in data" class="grid grid-cols-7 gap-4">
-            <vs-td :data="data[indextr].name">
+          <vs-tr :state="tr.role == 'Super Admin'?'success':tr.role == 'Admin'?'primary':null" :key="tr._id" v-for="(tr, indextr) in data" class="grid grid-cols-7 gap-4">
+            <vs-td >
               {{data[indextr].name}}
             </vs-td>
-
+         
             <vs-td :data="data[indextr]._id">
               {{data[indextr]._id}} 
             </vs-td>
@@ -51,20 +52,20 @@
               <vs-avatar/> 
             </vs-td>
 
-            <vs-td :data="data[indextr].department">
+            <vs-td >
               {{data[indextr].department}}
             </vs-td>
 
-            <vs-td :data="data[indextr].role">
+            <vs-td >
               {{data[indextr].role}}
             </vs-td>
-            <vs-td :data="data[indextr].status">
+            <vs-td >
               <vs-chip :color="tr.status ? 'primary' : 'danger'">
                 <vs-avatar @click='toggleStatus(tr.status, indextr)'  icon="edit" />
                 {{data[indextr].status ? "active" : "not active" }}
               </vs-chip>
             </vs-td>
-            <vs-td :data="data[indextr].role">
+            <vs-td >
               <div class="grid grid-cols-2">
                 <div>
                   <router-link :to="{name: 'user', params: {username: tr._id}}">
@@ -94,7 +95,7 @@
                   >
                     <b-form-input
                       id="username"
-                      v-model="username"
+                      v-model="un"
                       type="text"
                       placeholder="John123"
                       required
@@ -140,7 +141,7 @@
                     label-for="department"
                   >
                     <b-form-select
-                      id="departmet"
+                      id="department"
                       v-model="department"
                       :options="departments"
                       required
@@ -222,84 +223,81 @@
 </template>
 
 <script>
-import VxCard from '../../components/vx-card/VxCard.vue';
-import {mapGetters, mapActions} from 'vuex';
-import axios from 'axios';
+import VxCard from "../../components/vx-card/VxCard.vue";
+import { mapGetters, mapActions } from "vuex";
+import axios from "axios";
 export default {
-components: {
-  VxCard,
-},
-data:()=>({
-    selected:false,
-    departments : [
-      "BBA", "CS", "Applied Physics", "Electrical Engineering"
-    ],
-    roles : [
-      "Admin", "Super Admin", "DTO"
-    ],
+  components: {
+    VxCard,
+  },
+  data: () => ({
+    selected: false,
+    departments: ["BBA", "CS", "Applied Physics", "Electrical Engineering"],
+    roles: ["Admin", "Super Admin", "DTO"],
     popupActivo: false,
-    name: '',
-    username:'',
-    email: '',
-    designation:'',
-    password: '',
-    password2: '',
-    department:null,
-    role: '',
-    all_users:[],
+    name: "",
+    un: "",
+    email: "",
+    designation: "",
+    password: "",
+    password2: "",
+    department: null,
+    role: "",
+    all_users: [],
   }),
   methods: {
-    onSubmit: async function(e) {
-      e.preventDefault()
+    onSubmit: async function () {
+      // e.preventDefault()
       var newUser = {
         name: this.name,
-        username: this.username,
+        un: this.un,
         email: this.email,
-        password: this.password2,
+        password: this.password,
         designation: this.designation,
         department: this.department,
-        role: this.role 
-      }
-      this.all_users.push(newUser) 
-      this.popupActivo = false
-      const response = await axios.post('http://localhost:5000/api/user/KT1', newUser)
-      console.log(response.data.msg)
+        role: this.role,
+      };
+      this.all_users.push(newUser);
+      this.popupActivo = false;
+      // const response=axios({
+      // method: 'post',
+      // url: 'http://localhost:5000/api/user/abc',
+      // body: newUser,
+      // headers: {
+      //   'Content-Type': 'application/json'
+      // }
+      // })
+
+      const response = await axios.post(
+        "http://localhost:5000/api/user/KT1",
+        newUser
+      );
+      console.log(response.data.msg);
     },
-    toggleStatus: function(status, index) {
-      this.users[index].status = !status
+    toggleStatus: function (status, index) {
+      this.users[index].status = !status;
     },
-    get_all_users: async function() {
-      const res = await axios.get('http://localhost:5000/api/users')
-      this.all_users = res.data.results
-    } ,
-    ...mapActions(['fetchUsers'])
-    // validateFields : function() {
-    //   return true ?
-    //     this.name.length > 0 &&
-    //     this.username.length > 0 &&
-    //     this.email.length > 0
-    //   : false
-    //     this.departments.length > 0 &&
-    //     this.designation.length > 0 &&
-    //     this.role.length > 0 &&
-    //     this.validatePass &&
-    //     this.confirmPass
-    // },
+    get_all_users: async function () {
+      const res = await axios.get("http://localhost:5000/api/users");
+      this.all_users = res.data.results;
+    },
+    ...mapActions(["fetchUsers"]),
   },
-  computed : {
-    ...mapGetters(['allUsers']),
+  computed: {
+    ...mapGetters(["allUsers"]),
+
     validatePass() {
-      return this.password.length > 7 && this.password.length < 13
+      return this.password.length > 7 && this.password.length < 13;
     },
-    confirmPass () {
-      return this.password2 === this.password && this.password2.length > 0
+    confirmPass() {
+      return this.password2 === this.password && this.password2.length > 0;
     },
-    },
+  },
   created() {
-    this.fetchUsers()
-    this.get_all_users()
-  }
-}
+    this.fetchUsers();
+    this.get_all_users();
+  },
+};
 </script>
 
 <style lang="scss">
@@ -307,16 +305,16 @@ b-form-input :focus {
   background-color: #101639;
 }
 
-.labelx, .vs-input
-{  
-  margin : 10px;
+.labelx,
+.vs-input {
+  margin: 10px;
 }
-.vs-input{
+.vs-input {
   line-height: 1em;
   width: 100%;
   font-size: 2em;
 }
-.sidebarx{
+.sidebarx {
   position: fixed;
   z-index: 50000;
 }

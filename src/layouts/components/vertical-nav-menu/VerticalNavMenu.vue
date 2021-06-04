@@ -31,20 +31,21 @@
 
           <!-- Logo -->
           <router-link tag="div" class="vx-logo cursor-pointer flex items-center" to="/">
-            <logo class="w-10 mr-4 fill-current text-primary" />
-            <span class="vx-logo-text text-primary" v-show="isMouseEnter || !reduce" v-if="title">{{ title }}</span>
+            <img src="../logo.png" style="width:5em; height:3em; margin:0px auto" alt="FUUAST">
+            <!-- <logo class="w-10 mr-4 fill-current text-primary" /> -->
+            <span class="vx-logo-text text-primary ml-2"> FUUAST DMS </span>
           </router-link>
           <!-- /Logo -->
 
           <!-- Menu Buttons -->
-          <div>
+          <!-- <div> -->
             <!-- Close Button -->
-            <template v-if="showCloseButton">
+            <!-- <template v-if="showCloseButton">
               <feather-icon icon="XIcon" class="m-0 cursor-pointer" @click="$store.commit('TOGGLE_IS_VERTICAL_NAV_MENU_ACTIVE', false)" />
-            </template>
+            </template> -->
 
             <!-- Toggle Buttons -->
-            <template v-else-if="!showCloseButton && !verticalNavMenuItemsMin">
+            <!-- <template v-else-if="!showCloseButton && !verticalNavMenuItemsMin">
               <feather-icon
                 id="btnVNavMenuMinToggler"
                 class="mr-0 cursor-pointer"
@@ -52,7 +53,7 @@
                 svg-classes="stroke-current text-primary"
                 @click="toggleReduce(!reduce)" />
             </template>
-          </div>
+          </div> -->
           <!-- /Menu Toggle Buttons -->
         </div>
         <!-- /Header -->

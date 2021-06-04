@@ -11,17 +11,53 @@
 import Vue from 'vue'
 import App from './App.vue'
 
+
 // Vue Vue-Boostrap Framework
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 
 // Import Bootstrap an BootstrapVue CSS files (order is important)
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
+/* eslint-disable */
 
 // Make BootstrapVue available throughout your project
 Vue.use(BootstrapVue)
 // Optionally install the BootstrapVue icon components plugin
 Vue.use(IconsPlugin)
+
+//Register plugin
+// Vue.use(http)
+
+
+//Auth Guard
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    // this route requires auth, check if logged in
+    // if not, redirect to login page.
+    if (!store.getters.loggedIn) {
+      next({
+        path: '/pages/login',
+        // query: { redirect: to.fullPath }
+      })
+    } else {
+      next()
+    }
+  } else if (to.matched.some(record => record.meta.requiresVisitor)) {
+    // this route requires auth, check if logged in
+    // if not, redirect to login page.
+    if (store.getters.loggedIn) {
+      next({
+        path: '/',
+        // query: { redirect: to.fullPath }
+        // redirect:'/'
+      })
+    } else {
+      next()
+    }
+  } else {
+    next()
+  }
+})
 
 // Vuesax Component Framework
 import Vuesax from 'vuesax'

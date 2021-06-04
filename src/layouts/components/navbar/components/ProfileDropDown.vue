@@ -18,7 +18,9 @@
           <li
             class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white">
             <feather-icon icon="UserIcon" svgClasses="w-4 h-4" />
-            <router-link to="/user"><span class="ml-2">Profile</span></router-link>
+            <router-link :to="{name: 'user', params: {username: payloadUname}}">
+              <span class="ml-2">Profile</span>
+            </router-link>
           </li>
 
           <li
@@ -39,18 +41,13 @@
             <span class="ml-2">Chat</span>
           </li>
 
-          <li
-            class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white">
-            <feather-icon icon="HeartIcon" svgClasses="w-4 h-4" />
-            <span class="ml-2">Wish List</span>
-          </li>
 
           <vs-divider class="m-1" />
 
           <li
             class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white">
             <feather-icon icon="LogOutIcon" svgClasses="w-4 h-4" />
-            <span class="ml-2">Logout</span>
+            <router-link to="/pages/logout"><span class="ml-2">Logout</span></router-link>
           </li>
         </ul>
       </vs-dropdown-menu>
@@ -59,10 +56,11 @@
 </template>
 
 <script>
+import VueJwtDecode from 'vue-jwt-decode';
 export default {
   data () {
     return {
-
+      payloadUname : ""
     }
   },
   computed: {
@@ -80,6 +78,10 @@ export default {
       // This is just for demo Purpose. If user clicks on logout -> redirect
       this.$router.push('/pages/login').catch(() => {})
     }
+  },
+  created() {
+    const payload = VueJwtDecode.decode(localStorage.getItem('access-token'))
+    this.payloadUname = payload['username']
   }
 }
 </script>

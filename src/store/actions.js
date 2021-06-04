@@ -7,6 +7,7 @@
   Author URL: http://www.themeforest.net/user/pixinvent
 ==========================================================================================*/
 import axios from 'axios';
+import router from '../router.js'
 
 const actions = {
 
@@ -54,7 +55,52 @@ const actions = {
     async fetchUsers({commit}) {
       const res = await axios.get('http://127.0.0.1:5000/api/users')
       commit('getUsers', res.data)
+      console.log(res.data)
     },
+
+    destroyToken({commit}){
+      return new Promise((resolve, reject) => {
+
+        if(this.state != null){
+          try{
+            localStorage.removeItem('access-token')
+            commit('remToken')
+            resolve()
+          }
+          catch (error){
+            localStorage.removeItem('access-token')
+            commit('remToken')
+            reject(error)
+          }
+        }
+      })
+    },
+
+    retrieveToken({commit},credentials) {
+      return new Promise(async (resolve, reject) => {
+
+        const res = await axios.post('http://127.0.0.1:5000/api/login', credentials)
+        const token = res.data.token
+        const isAdmin = true ? res.data.isAdmin : false
+        console.log(isAdmin) 
+        try{
+          localStorage.setItem('access-token', token)
+          localStorage.setItem('isAdmin', isAdmin)
+          commit('getToken', token, isAdmin)
+          router.push('/')
+          resolve(res)
+        }
+        catch(error) {
+          reject(error)
+        }
+      })
+    },
+
+    toggleCreator({commit}) {
+      localStorage.setItem('isCreator')
+      commit('shiftCreator')
+    }
+
 
 }
 

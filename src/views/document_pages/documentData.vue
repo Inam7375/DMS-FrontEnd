@@ -1,7 +1,15 @@
 <template>
   <div>
       <div style="margin-bottom: 1em">
-          <vs-button @click="popupActivo=true" style="border-radius:5px;" color="primary" type="filled">Add Update</vs-button>
+          <div class="grid grid-cols-2 gap-6">
+              <div>
+                <vs-button @click="addUpdate" style="border-radius:5px;" color="primary" type="filled">Add Update</vs-button>
+              </div>
+              <div v-show="this.$store.state.isCreator">
+                <vs-checkbox style="float:right; margin-top: .5em" color="success" v-model="checkBox">Add document to completed</vs-checkbox>
+              </div>
+          </div>
+
       </div>
       <div class="grid grid-cols-12" style="margin-bottom: .5em" :key="index" v-for="(item, index) in logList">
       <div class="col-span-2" style="margin: auto">
@@ -133,15 +141,32 @@
         <vs-button @click="onSubmit" style="border-radius:5px; margin: 1em auto;" icon="add" color="info" type="flat">Update</vs-button>
       </vs-popup>
     </div>
-  </div>
+        <vs-popup class="holamundo"  title="Confirmation" :active.sync="popupActivo2">
+            <p style="font-size:1.5em">Mark Document As Completed</p>
+            <br><br>
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <vs-button style="width:100%" @click="popupActivo2=false" color="danger" type="border">Cancel</vs-button>
+                </div>
+                <div>
+                    <vs-button style="width:100%" @click="confirmComplete" color="success" type="border">Confirm</vs-button>
+                </div>
+            </div>
+
+        </vs-popup>
+    </div>
+
 </template>
 
 <script>
 import axios from 'axios';
+import VueJwtDecode from 'vue-jwt-decode';
 export default{
     data: () => ({
         docID : "",
         popupActivo: false,
+        popupActivo2: false,
+        checkBox : false,
         forwardedToUname : "",
         forwardedDep: "",
         objection: "",
@@ -151,6 +176,24 @@ export default{
         logList : []
     }),
     methods: {
+
+        confirmComplete: async function() {
+            if(this.checkBox){
+                const res = await axios.put('http://localhost:5000/api/updatedocuments' , {'docID': this.$route.params.docID})
+                console.log(res.data.msg)
+            }
+            this.popupActivo2 = false
+        },
+
+        addUpdate : function() {
+            
+            if(this.checkBox != true){
+                this.popupActivo=true
+            } else {
+                this.popupActivo2=true
+            }
+        },
+
         getLogs : async function(){
             const res = await axios.get(`http://localhost:5000/api/logs/${this.$route.params.docID}`)
             if (res.status == 200){
@@ -188,18 +231,21 @@ export default{
                 date: today
             }
             this.logList.push(newLog)
+            this.popupActivo = false
+            const payload = VueJwtDecode.decode(localStorage.getItem('access-token'))
+            const username = payload['username']
             if (this.sequence.length > 0){
                 this.sequence[this.sequence.length - 1] = ['Recieved']
             }
             this.sequence.push(['Pending']) 
-            const res = await axios.put(`http://localhost:5000/api/logs/${this.$route.params.docID}`, newLog)
-            this.popupActivo = false
-
-            console.log(res.msg)
+            const log_api_resp = await axios.put(`http://localhost:5000/api/logs/${this.$route.params.docID}`, newLog)
+            const approved_docs_api_resp = await axios.put(`http://localhost:5000/api/userapproveddocuments/${username}`, {'docID' : this.$route.params.docID})
+            const notification_api_resp = await axios.put(`http://localhost:5000/api/usernotify/${username}`, {'docID' : this.$route.params.docID})
         }
     },
     created(){
+        this.isCreator = this.$store.state.isCreator
         this.getLogs()
-    }
+    },
 }
 </script>

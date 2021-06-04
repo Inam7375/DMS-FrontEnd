@@ -16,7 +16,10 @@ const mutations = {
   // /////////////////////////////////////////////
   
   //Getting users
-  getUsers(state, users) { state.users = users },
+  getUsers(state, users) { 
+    state.users = users
+    console.log(users)
+   },
   // Vertical NavMenu
 
   TOGGLE_IS_VERTICAL_NAV_MENU_ACTIVE(state, value) {
@@ -117,7 +120,17 @@ const mutations = {
     // Store data in localStorage
     localStorage.setItem("userInfo", JSON.stringify(userInfo))
   },
-
+  getToken(state, token, isAdmin){
+    state.token = token
+    state.isAdmin = isAdmin
+  },
+  remToken(state, token){
+    state.token = null
+    state.isAdmin = null
+  },
+  shiftCreator(state){
+    state.isCreator = !state.isCreator
+  }
 }
 
 export default mutations
