@@ -250,7 +250,7 @@ export default {
       // e.preventDefault()
       var newUser = {
         name: this.name,
-        un: this.un,
+        _id: this.un,
         email: this.email,
         password: this.password,
         designation: this.designation,

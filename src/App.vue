@@ -9,7 +9,7 @@
 
 <template>
   <div id="app" :class="vueAppClasses">
-    <router-view @setAppClasses="setAppClasses" />
+    <router-view :key="$route.path" @setAppClasses="setAppClasses" />
   </div>
 </template>
 

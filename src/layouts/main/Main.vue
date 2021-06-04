@@ -212,9 +212,11 @@ export default {
     const color = this.navbarColor === '#fff' && this.isThemeDark ? '#10163a' : this.navbarColor
     this.updateNavbarColor(color)
     this.setNavMenuVisibility(this.$store.state.mainLayoutType)
-    console.log(this.$store.state.isAdmin)
-    this.navMenuItems = this.$store.state.isAdmin ? navMenuItems[0] : navMenuItems[1]
-
+    if(localStorage.getItem('isAdmin') == "true"){
+      this.navMenuItems = navMenuItems[0]
+    }else{
+      this.navMenuItems = navMenuItems[1]
+    }
   }
 }
 

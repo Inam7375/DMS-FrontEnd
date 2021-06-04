@@ -74,7 +74,7 @@ export default{
     return {
       username: "",
       password: "",
-      checkbox_remember_me: true,
+      checkbox_remember_me: false
     }
   },
   methods: {
