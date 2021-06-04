@@ -92,7 +92,7 @@
 						<vs-td>
 							<div>
 							<router-link :to="{name: 'document', params: {docID: tr._id}}">
-								<vs-button @click="toggleCreator" radius size="large" line-position="left" color="success" type="flat" icon="edit"></vs-button>
+								<vs-button radius size="large" line-position="left" color="success" type="flat" icon="edit"></vs-button>
 							</router-link>
 							</div>
 						</vs-td>
