@@ -69,7 +69,7 @@ const state = {
     // Note: Above breakpoint state is for internal use of sidebar & navbar component
     windowWidth: null,
     users : [],
-    isCreator: localStorage.getItem('isCreator') || false,
+    isCreator: false,
     token: localStorage.getItem('access-token') || null,
     isAdmin: localStorage.getItem('isAdmin') || null,
 }

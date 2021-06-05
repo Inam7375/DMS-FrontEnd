@@ -2,7 +2,7 @@
   <div class="the-navbar__user-meta flex items-center" v-if="activeUserInfo.displayName">
 
     <div class="text-right leading-tight hidden sm:block">
-      <p class="font-semibold">{{ activeUserInfo.displayName }}</p>
+      <p class="font-semibold">{{ payloadName }}</p>
       <small>Available</small>
     </div>
 
@@ -60,7 +60,8 @@ import VueJwtDecode from 'vue-jwt-decode';
 export default {
   data () {
     return {
-      payloadUname : ""
+      payloadUname : "",
+      payloadName: ""
     }
   },
   computed: {
@@ -81,7 +82,10 @@ export default {
   },
   created() {
     const payload = VueJwtDecode.decode(localStorage.getItem('access-token'))
+    console.log(payload)
     this.payloadUname = payload['username']
+    this.payloadName = payload['fullName']
+    console.log(this.payloadName)
   }
 }
 </script>

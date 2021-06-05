@@ -81,13 +81,12 @@ const actions = {
 
         const res = await axios.post('http://127.0.0.1:5000/api/login', credentials)
         const token = res.data.token
-        const isAdmin = true ? res.data.isAdmin : false
-        console.log(isAdmin) 
+        const isAdmin = res.data.isAdmin
         try{
           localStorage.setItem('access-token', token)
           localStorage.setItem('isAdmin', isAdmin)
           commit('getToken', token, isAdmin)
-          router.push('/')
+          router.push('/');
           resolve(res)
         }
         catch(error) {
