@@ -1,5 +1,6 @@
 <template>
   <div>
+     <b-alert v-if="message.length > 0" class="alert" show dismissible fade:variant="messageVariant" >{{message}}</b-alert>
     <!-- <vx-card> -->
     <vs-tabs>
       <vs-tab label="Profile">
@@ -181,8 +182,22 @@ export default {
     department: null,
     role: "",
     all_users: [],
+    message:'',
+    messageVariant:''
   }),
   methods: {
+     showAlert:function(res){
+     this.message=res.data.msg;
+     if(res.status=='201'){
+        this.messageVariant='success'
+      }
+      else if(res.status=='203'){
+        this.messageVariant='danger'
+      }
+      setTimeout(()=>{
+         this.message=''
+      }, 3000)
+    },
     updateUser: async function (e) {
       e.preventDefault();
       var updateUser = {
@@ -198,7 +213,7 @@ export default {
         `http://localhost:5000/api/user/${this.$route.params.username}`,
         updateUser
       );
-      console.log(response.data.msg);
+     this.showAlert(response)
     },
   },
   async created() {
@@ -225,3 +240,11 @@ export default {
     },
 };
 </script>
+<style lang="scss">
+.alert{
+ text-align: center;
+ width: 750px;
+ height: 40px;
+ font-weight: bold;
+}
+</style>
