@@ -72,6 +72,7 @@ const state = {
     isCreator: false,
     token: localStorage.getItem('access-token') || null,
     isAdmin: localStorage.getItem('isAdmin') || null,
+    
 }
 
 export default state

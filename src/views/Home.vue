@@ -34,7 +34,7 @@
 			<p class="text-3xl">All Documents</p>
 			<div class="con-tab-ejemplo">
 				<vs-table max-items="5" search pagination :data="all_documents">
-					<div slot="thead" class="grid grid-cols-8 gap-4">
+					<div slot="thead" class="grid grid-cols-8 gap-4 custom">
 					<vs-th sort-key="_id" style="flex-grow:1">
 						Document ID
 					</vs-th>
@@ -156,4 +156,10 @@ export default{
 		position: relative;
 		/* opacity: 70%; */
 	}
+	.custom{
+	font-weight: bold;
+}
+vs-th{
+	color:#fff;
+}
 </style>

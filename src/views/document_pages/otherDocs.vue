@@ -1,5 +1,6 @@
 <template lang="html">
   <div>
+    <b-alert v-if="message.length > 0" class="alert" show dismissible fade:variant="messageVariant" >{{message}}</b-alert>
     <div>
       <vx-card style="margin-bottom: 2em;">
         <div class="grid grid-cols-2 gap-8">
@@ -364,8 +365,22 @@ data:()=>({
     all_documents_created:[],
     all_documents_completed:[],
     all_documents_pending:[],
+     message:'',
+    messageVariant:''
   }),
   methods: {
+    showAlert:function(res){
+     this.message=res.data.msg;
+     if(res.status=='201'){
+        this.messageVariant='success'
+      }
+      else if(res.status=='203'){
+        this.messageVariant='danger'
+      }
+      setTimeout(()=>{
+         this.message=''
+      }, 3000)
+    },
     toggleCreator : function() {
       localStorage.setItem('isCreator', true)
       this.$store.state.isCreator = true
@@ -395,6 +410,7 @@ data:()=>({
       console.log(newDocument['_id'])
       this.popupActivo = false
       const response = await axios.post('http://localhost:5000/api/documents', newDocument)
+       this.showAlert(response)
       console.log(response.data.msg)
     },
 
@@ -464,6 +480,12 @@ b-form-input :focus {
       margin-left: 10px;
     }
   }
+}
+.alert{
+ text-align: center;
+ width: 750px;
+ height: 40px;
+ font-weight: bold;
 }
 
 .footer-sidebar {

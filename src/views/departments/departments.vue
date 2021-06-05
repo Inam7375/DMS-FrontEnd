@@ -11,15 +11,15 @@
       >
     </div>
     <br />
-    <div class="grid grid-cols-3 gap-4">
-      <vx-card :key="item._id" v-for="(item, index) in allDepartments">
-        <div class="grid grid-cols-5">
-          <div>
+    <div class="grid grid-cols-3 gap-4 ">
+      <vx-card class="custom" :key="item._id" v-for="(item, index) in allDepartments">
+        <div class="grid grid-cols-5 ">
+          <div class="textchange">
             Name : <br />
             HOD : <br />
             About :
           </div>
-          <div class="col-span-4">
+          <div class="col-span-4 textchange">
             {{ item._id }} <br />
             {{ item.depHOD }} <br />
             {{ item.about }}
@@ -50,7 +50,7 @@
         </div>
       </vx-card>
     </div>
-    <div class="parentx">
+    <div class="parentx" >
       <vs-popup
         class="holamundo"
         title="Add Department"
@@ -235,13 +235,15 @@ export default {
         depHOD: this.depHOD,
         about: this.about,
       };
-      this.allDepartments.push(newDepartment);
-      this.popupActivo = false;
       const response = await axios.post(
         "http://localhost:5000/api/departments",
         newDepartment
       );
       this.showAlert(response)
+       if(response.status=='201'){
+        this.allDepartments.push(newDepartment);
+       this.popupActivo = false;
+      }
     },
     onSubmitUpdate: async function (index) {
       var newDepartment = {
@@ -315,6 +317,12 @@ b-form-input :focus {
  width: 750px;
  height: 40px;
  font-weight: bold;
+}
+.custom{
+  background-color: #10163a;
+}
+.textchange{
+  color: aliceblue;
 }
 .footer-sidebar {
   display: flex;

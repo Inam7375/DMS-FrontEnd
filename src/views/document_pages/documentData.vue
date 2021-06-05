@@ -1,5 +1,6 @@
 <template>
   <div>
+      <b-alert v-if="message.length > 0" class="alert" show dismissible fade:variant="messageVariant" >{{message}}</b-alert>
       <div style="margin-bottom: 1em">
           <div class="grid grid-cols-2 gap-6">
               <div>
@@ -173,14 +174,29 @@ export default{
         comments: "",
         status: "Pending",
         sequence: [],
-        logList : []
+        logList : [],
+         message:'',
+    messageVariant:''
     }),
     methods: {
+    showAlert:function(res){
+     this.message=res.data.msg;
+     if(res.status=='201'){
+        this.messageVariant='success'
+      }
+      else if(res.status=='203'){
+        this.messageVariant='danger'
+      }
+      setTimeout(()=>{
+         this.message=''
+      }, 3000)
+    },
 
         confirmComplete: async function() {
             if(this.checkBox){
-                const res = await axios.put('http://localhost:5000/api/updatedocuments' , {'docID': this.$route.params.docID})
+                const response = await axios.put('http://localhost:5000/api/updatedocuments' , {'docID': this.$route.params.docID})
                 console.log(res.data.msg)
+                 this.showAlert(response)
             }
             this.popupActivo2 = false
         },
@@ -241,6 +257,7 @@ export default{
             const log_api_resp = await axios.put(`http://localhost:5000/api/logs/${this.$route.params.docID}`, newLog)
             const approved_docs_api_resp = await axios.put(`http://localhost:5000/api/userapproveddocuments/${username}`, {'docID' : this.$route.params.docID})
             const notification_api_resp = await axios.put(`http://localhost:5000/api/usernotify/${username}`, {'docID' : this.$route.params.docID})
+            this.showAlert(log_api_resp)
         }
     },
     created(){
@@ -249,3 +266,11 @@ export default{
     },
 }
 </script>
+<style lang="scss">
+.alert{
+ text-align: center;
+ width: 750px;
+ height: 40px;
+ font-weight: bold;
+}
+</style>

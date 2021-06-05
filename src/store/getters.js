@@ -18,6 +18,10 @@ const getters = {
   loggedIn : (state) => {
     return state.token !== null
   },
+  checkToken : (state) => {
+    return state.token 
+  },
+  
 	// COMPONENT
 		// vx-autosuggest
 	// starredPages: state => state.navbarSearchAndPinList.data.filter((page) => page.highlightAction),

@@ -1,10 +1,11 @@
 <template lang="html">
   <div>
+    <b-alert v-if="message.length > 0" class="alert" show dismissible fade:variant="messageVariant" >{{message}}</b-alert>
     <div>
       <vx-card style="margin-bottom: 2em;">
         <div class="grid grid-cols-2 gap-8">
           <div>
-            <p class="text-3xl">Documents List</p>
+            <p class="text-3xl customStyle">Documents List</p>
             <p>You can search all the documents here.</p>
           </div>
           <div>
@@ -364,13 +365,28 @@ data:()=>({
     all_documents_created:[],
     all_documents_completed:[],
     all_documents_pending:[],
+     message:'',
+    messageVariant:''
   }),
   methods: {
+    showAlert:function(res){
+     this.message=res.data.msg;
+     if(res.status=='201'){
+        this.messageVariant='success'
+      }
+      else if(res.status=='203'){
+        this.messageVariant='danger'
+      }
+      setTimeout(()=>{
+         this.message=''
+      }, 3000)
+    },
     archiveDocuments : async function(index, docID) {
       const response = await axios.put('http://localhost:5000/api/archivedocuments',{
         _id: docID
       })
       // this.$delete(this.someItems, itemIndex)
+       this.showAlert(response)
       console.log(response.data.msg)
 
     },
@@ -403,6 +419,7 @@ data:()=>({
       console.log(newDocument['_id'])
       this.popupActivo = false
       const response = await axios.post('http://localhost:5000/api/documents', newDocument)
+       this.showAlert(response)
       console.log(response.data.msg)
     },
 
@@ -472,6 +489,15 @@ b-form-input :focus {
       margin-left: 10px;
     }
   }
+}
+.alert{
+ text-align: center;
+ width: 750px;
+ height: 40px;
+ font-weight: bold;
+}
+.customStyle{
+  color: #7367F0;
 }
 
 .footer-sidebar {

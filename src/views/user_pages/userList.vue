@@ -4,8 +4,8 @@
     <b-alert v-if="message.length > 0" class="alert" show dismissible fade:variant="messageVariant">{{message}}
     </b-alert>
     <div>
-      <vx-card style="margin-bottom: 2em;">
-        <p class="text-3xl">Users List</p>
+      <vx-card  style="margin-bottom: 2em;">
+        <p class="text-3xl customStyle">Users List</p>
         <p>You can search registered users here.</p>
       </vx-card>
       
@@ -73,9 +73,6 @@
                   <router-link :to="{name: 'user', params: {username: tr._id}}">
                     <vs-button radius size="large" line-position="left" color="success" type="flat" icon="edit"></vs-button>
                   </router-link>
-                </div>
-                <div>
-                  <vs-button @click="delUser(tr._id)" radius size="large" color="danger" type="flat" icon="delete"></vs-button>
                 </div>
               </div>
             </vs-td>
@@ -247,21 +244,20 @@ export default {
     department: null,
     role: "",
     all_users: [],
-    message:'',
-    messageVariant:''
+    message: "",
+    messageVariant: "",
   }),
   methods: {
-     showAlert:function(res){
-     this.message=res.data.msg;
-     if(res.status=='201'){
-        this.messageVariant='success'
+    showAlert: function (res) {
+      this.message = res.data.msg;
+      if (res.status == "201") {
+        this.messageVariant = "success";
+      } else if (res.status == "203") {
+        this.messageVariant = "danger";
       }
-      else if(res.status=='203'){
-        this.messageVariant='danger'
-      }
-      setTimeout(()=>{
-         this.message=''
-      }, 3000)
+      setTimeout(() => {
+        this.message = "";
+      }, 3000);
     },
     onSubmit: async function () {
       // e.preventDefault()
@@ -275,12 +271,12 @@ export default {
         role: this.role,
       };
       this.all_users.push(newUser);
-      this.popupActivo = false;
+        this.popupActivo = false;
       const response = await axios.post(
         "http://localhost:5000/api/user/KT1",
         newUser
       );
-       this.showAlert(response)
+      this.showAlert(response);
     },
     toggleStatus: function (status, index) {
       this.users[index].status = !status;
@@ -288,14 +284,6 @@ export default {
     get_all_users: async function () {
       const res = await axios.get("http://localhost:5000/api/users");
       this.all_users = res.data.results;
-    },
-    delUser: async function(id){
-      this.all_users=this.all_users.filter(user=>{
-        return user._id!==id
-      })
-      const response = await axios.delete(
-        `http://localhost:5000/api/user/${id}`);
-       this.showAlert(response)
     },
     ...mapActions(["fetchUsers"]),
   },
@@ -350,13 +338,15 @@ b-form-input :focus {
     }
   }
 }
-.alert{
- text-align: center;
- width: 750px;
- height: 40px;
- font-weight: bold;
+.alert {
+  text-align: center;
+  width: 750px;
+  height: 40px;
+  font-weight: bold;
 }
-
+.customStyle{
+  color: #7367F0;
+}
 .footer-sidebar {
   display: flex;
   align-items: center;
