@@ -5,8 +5,8 @@
     <vs-tabs>
       <vs-tab label="Profile">
         <div class="con-tab-ejemplo">
-          <b-form @submit.stop.prevent>
-            <div class="grid grid-cols-2 gap-4">
+          <b-form  @submit="updateUser" @submit.stop.prevent>
+            <div class="grid grid-cols-2 gap-4" style="color:#101639">
               <div>
                 <b-form-group
                   class="text-xl"
@@ -135,11 +135,12 @@
                 </b-form-group>
               </div>
             </div>
+              <b-button color="primary" style="font-weight:bold; background-color:#7367F0" type="submit"
+            >Update</b-button
+          >
           </b-form>
 
-          <vs-button @click="updateUser" color="primary" type="flat"
-            >Update</vs-button
-          >
+        
         </div>
       </vs-tab>
       <!-- <vs-tab label="Information">

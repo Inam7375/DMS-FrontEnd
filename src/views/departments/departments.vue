@@ -1,6 +1,13 @@
 <template>
   <div>
-    <b-alert v-if="message.length > 0" class="alert" show dismissible fade:variant="messageVariant" >{{message}}</b-alert>
+    <b-alert
+      v-if="message.length > 0"
+      class="alert"
+      show
+      dismissible
+      fade:variant="messageVariant"
+      >{{ message }}</b-alert
+    >
     <div style="margin-bottom: 1em">
       <vs-button
         @click="popupActivo = true"
@@ -11,9 +18,13 @@
       >
     </div>
     <br />
-    <div class="grid grid-cols-3 gap-4 ">
-      <vx-card class="custom" :key="item._id" v-for="(item, index) in allDepartments">
-        <div class="grid grid-cols-5 ">
+    <div class="grid grid-cols-3 gap-4">
+      <vx-card
+        class="custom"
+        :key="item._id"
+        v-for="(item, index) in allDepartments"
+      >
+        <div class="grid grid-cols-5">
           <div class="textchange">
             Name : <br />
             HOD : <br />
@@ -50,13 +61,14 @@
         </div>
       </vx-card>
     </div>
-    <div class="parentx" >
+    <div class="parentx">
       <vs-popup
         class="holamundo"
         title="Add Department"
         :active.sync="popupActivo"
+        style="color: #101639"
       >
-        <b-form @submit.stop.prevent>
+        <b-form @submit="onSubmit" @submit.stop.prevent>
           <b-form-group
             class="text-xl"
             id="DepartmentName"
@@ -96,18 +108,19 @@
             rows="1"
             max-rows="6"
           ></b-form-textarea>
-
+          <b-button
+            type="submit"
+            style="
+              border-radius: 5px;
+              margin: 1em auto;
+              background-color: #7367f0;
+            "
+            icon="add"
+            color="primary"
+            >Add</b-button
+          >
           <!-- <pre class="mt-3 mb-0">{{ text }}</pre> -->
         </b-form>
-
-        <vs-button
-          @click="onSubmit"
-          style="border-radius: 5px; margin: 1em auto"
-          icon="add"
-          color="warning"
-          type="flat"
-          >Add</vs-button
-        >
       </vs-popup>
 
       <vs-sidebar
@@ -122,7 +135,7 @@
         <div class="header-sidebar" slot="header">
           <h4>Update Department</h4>
         </div>
-        <b-form @submit.stop.prevent>
+        <b-form @submit="onSubmitUpdate(index)" @submit.stop.prevent>
           <vs-sidebar-item index="1">
             <b-form-group
               class="text-xl"
@@ -168,20 +181,20 @@
               rows="1"
               max-rows="6"
             ></b-form-textarea>
-
-            <pre class="mt-3 mb-0">{{ text }}</pre>
           </vs-sidebar-item>
+          <div class="footer-sidebar" slot="footer">
+            <b-button
+              style="
+                border-radius: 5px;
+                margin: 1em auto;
+                background-color: #7367f0;
+              "
+              icon="add"
+              type="submit"
+              >Update</b-button
+            >
+          </div>
         </b-form>
-        <div class="footer-sidebar" slot="footer">
-          <vs-button
-            @click="onSubmitUpdate(index)"
-            style="border-radius: 5px; margin: 1em auto"
-            icon="add"
-            color="warning"
-            type="flat"
-            >Update</vs-button
-          >
-        </div>
       </vs-sidebar>
     </div>
   </div>
@@ -202,28 +215,32 @@ export default {
     about: "",
     index: null,
     allDepartments: [],
-     message:'',
-    messageVariant:''
+    message: "",
+    messageVariant: "",
   }),
   methods: {
-     showAlert:function(res){
-     this.message=res.data.msg;
-     if(res.status=='201'){
-        this.messageVariant='success'
+    showAlert: function (res) {
+      this.message = res.data.msg;
+      if (res.status == "201") {
+        this.messageVariant = "success";
+      } else if (res.status == "203") {
+        this.messageVariant = "danger";
       }
-      else if(res.status=='203'){
-        this.messageVariant='danger'
-      }
-      setTimeout(()=>{
-         this.message=''
-      }, 3000)
+      setTimeout(() => {
+        this.message = "";
+      }, 3000);
+    },
+    onReset() {
+      // Reset our form values
+      (this.depName = ""), (this.depHOD = "");
+      this.about = "";
     },
     event: function (department, index) {
       this.active = !this.active;
       this.depName = department;
       this.index = index;
     },
-     
+
     getAllDepartments: async function () {
       const res = await axios.get("http://localhost:5000/api/departments");
       this.allDepartments = res.data.results;
@@ -239,10 +256,11 @@ export default {
         "http://localhost:5000/api/departments",
         newDepartment
       );
-      this.showAlert(response)
-       if(response.status=='201'){
+      this.showAlert(response);
+      if (response.status == "201") {
         this.allDepartments.push(newDepartment);
-       this.popupActivo = false;
+        this.popupActivo = false;
+        this.onReset()
       }
     },
     onSubmitUpdate: async function (index) {
@@ -259,7 +277,7 @@ export default {
         "http://localhost:5000/api/departments",
         newDepartment
       );
-      this.showAlert(response)
+      this.showAlert(response);
     },
     delDepartment: async function (id) {
       this.allDepartments = this.allDepartments.filter((item) => {
@@ -268,9 +286,8 @@ export default {
       const response = await axios.delete(
         `http://localhost:5000/api/department/${id}`
       );
-      this.showAlert(response)
+      this.showAlert(response);
     },
-   
   },
   created() {
     this.getAllDepartments();
@@ -312,16 +329,16 @@ b-form-input :focus {
     }
   }
 }
-.alert{
- text-align: center;
- width: 750px;
- height: 40px;
- font-weight: bold;
+.alert {
+  text-align: center;
+  width: 750px;
+  height: 40px;
+  font-weight: bold;
 }
-.custom{
+.custom {
   background-color: #10163a;
 }
-.textchange{
+.textchange {
   color: aliceblue;
 }
 .footer-sidebar {

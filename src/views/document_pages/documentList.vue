@@ -19,7 +19,7 @@
               <div class="con-tab-ejemplo">
                 
                 <vs-table max-items="5" search pagination :data="all_documents">
-                  <div slot="thead" class="grid grid-cols-8 gap-4">
+                  <div slot="thead" class="grid grid-cols-8 gap-4 custom text-3xl">
                     <vs-th sort-key="_id" style="flex-grow:1">
                       Document ID
                     </vs-th>
@@ -47,7 +47,7 @@
                   </div>
 
                   <div slot-scope="{data}">
-                    <vs-tr :state="tr.role == 'Super Admin'?'success':tr.role == 'Admin'?'primary':null" :key="indextr" v-for="(tr, indextr) in data" class="grid grid-cols-8 gap-4">
+                    <vs-tr :state="tr.role == 'Super Admin'?'success':tr.role == 'Admin'?'primary':null" :key="indextr" v-for="(tr, indextr) in data" class="grid grid-cols-8 gap-4 custom-color">
                       <vs-td :data="data[indextr]._id">
                         {{data[indextr]._id}}
                       </vs-td>
@@ -90,7 +90,7 @@
               <div class="con-tab-ejemplo">
                 
                 <vs-table max-items="5" search pagination :data="all_documents_completed">
-                  <div slot="thead" class="grid grid-cols-8 gap-4">
+                  <div slot="thead" class="grid grid-cols-8 gap-4 custom text-3xl">
                     <vs-th sort-key="_id" style="flex-grow:1">
                       Document ID
                     </vs-th>
@@ -118,7 +118,7 @@
                   </div>
 
                   <div slot-scope="{data}">
-                    <vs-tr :state="tr.role == 'Super Admin'?'success':tr.role == 'Admin'?'primary':null" :key="indextr" v-for="(tr, indextr) in data" class="grid grid-cols-8 gap-4">
+                    <vs-tr :state="tr.role == 'Super Admin'?'success':tr.role == 'Admin'?'primary':null" :key="indextr" v-for="(tr, indextr) in data" class="grid grid-cols-8 gap-4 custom-color">
                       <vs-td :data="data[indextr]._id">
                         {{data[indextr]._id}}
                       </vs-td>
@@ -162,7 +162,7 @@
               <div class="con-tab-ejemplo">
                 
                 <vs-table max-items="5" search pagination :data="all_documents_pending">
-                  <div slot="thead" class="grid grid-cols-8 gap-4">
+                  <div slot="thead" class="grid grid-cols-8 gap-4 custom text-3xl">
                     <vs-th sort-key="_id" style="flex-grow:1">
                       Document ID
                     </vs-th>
@@ -190,7 +190,7 @@
                   </div>
 
                   <div slot-scope="{data}">
-                    <vs-tr :state="tr.role == 'Super Admin'?'success':tr.role == 'Admin'?'primary':null" :key="indextr" v-for="(tr, indextr) in data" class="grid grid-cols-8 gap-4">
+                    <vs-tr :state="tr.role == 'Super Admin'?'success':tr.role == 'Admin'?'primary':null" :key="indextr" v-for="(tr, indextr) in data" class="grid grid-cols-8 gap-4 custom-color">
                       <vs-td :data="data[indextr]._id">
                         {{data[indextr]._id}}
                       </vs-td>
@@ -235,8 +235,8 @@
         </vs-tabs>
     </div>
     <div class="parentx">
-      <vs-popup class="holamundo"  title="Add User" :active.sync="popupActivo">
-          <b-form @submit.stop.prevent>
+      <vs-popup class="holamundo"  style="color:#101639" title="Add Document" :active.sync="popupActivo">
+          <b-form  @submit="onSubmit" @submit.stop.prevent>
             <b-form-group
               class="text-xl"
               id="Title"
@@ -330,11 +330,12 @@
               max-rows="6"
             ></b-form-textarea>
 
-            <pre class="mt-3 mb-0">{{ text }}</pre>
+            
           </div>
+          <b-button style="border-radius:5px; margin: 1em auto; background-color:#7367F0" icon="add" color="primary" type="submit">Add</b-button>
           </b-form>
 
-        <vs-button @click="onSubmit" style="border-radius:5px; margin: 1em auto;" icon="add" color="warning" type="flat">Add</vs-button>
+        
       </vs-popup>
     </div>
   </div>
@@ -381,6 +382,16 @@ data:()=>({
          this.message=''
       }, 3000)
     },
+    onReset(){
+    this.docID ='',
+    this.title='',
+    this.frmUser='',
+    this.frmDep='',
+    this.targetUser='',
+    this.targetDep='',
+    this.dsc=''
+
+    },
     archiveDocuments : async function(index, docID) {
       const response = await axios.put('http://localhost:5000/api/archivedocuments',{
         _id: docID
@@ -403,8 +414,7 @@ data:()=>({
       }
       document.getElementById("docID").value = x;
     },
-    onSubmit: async function(e) {
-      e.preventDefault()
+    onSubmit: async function() {
       var newDocument = {
         _id: this.docID,
         title: this.title,
@@ -420,6 +430,7 @@ data:()=>({
       this.popupActivo = false
       const response = await axios.post('http://localhost:5000/api/documents', newDocument)
        this.showAlert(response)
+       this.onReset()
       console.log(response.data.msg)
     },
 
@@ -498,6 +509,17 @@ b-form-input :focus {
 }
 .customStyle{
   color: #7367F0;
+}
+.custom{
+	font-weight: bold;
+	color: #fff;
+	background-color: #10163a;
+}
+.custom-color{
+  color: black;
+}
+.custom-color:nth-child(even){
+	background-color:#f2f2f2;
 }
 
 .footer-sidebar {

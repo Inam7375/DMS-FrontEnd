@@ -13,7 +13,7 @@
         <template slot="header">
           <vs-button @click="popupActivo=true" style="border-radius:5px;" color="primary" type="filled" icon="person_add">Add User</vs-button>
         </template>
-        <div slot="thead" class="grid grid-cols-7 gap-4">
+        <div slot="thead" class="grid grid-cols-7 gap-4 custom text-3xl">
           <vs-th sort-key="name" style="flex-grow:1">
             Full Name
           </vs-th>
@@ -41,7 +41,7 @@
         </div>
 
         <div slot-scope="{data}">
-          <vs-tr :state="tr.role == 'Super Admin'?'success':tr.role == 'Admin'?'primary':null" :key="tr._id" v-for="(tr, indextr) in data" class="grid grid-cols-7 gap-4">
+          <vs-tr :state="tr.role == 'Super Admin'?'success':null" :key="tr._id" v-for="(tr, indextr) in data" class="grid grid-cols-7 gap-4 custom-color">
             <vs-td >
               {{data[indextr].name}}
             </vs-td>
@@ -81,12 +81,12 @@
       </vs-table>
     </div>
     <div class="parentx">
-      <vs-popup class="holamundo"  title="Add User" :active.sync="popupActivo">
-          <b-form @submit.stop.prevent>
+      <vs-popup class="holamundo"  title="Add User"  :active.sync="popupActivo">
+          <b-form @submit="onSubmit" @submit.stop.prevent>
             <div class="grid grid-cols-2 gap-4">
-              <div>
+              <div class="custom-colors">
                  <b-form-group
-                    class="text-xl"
+                    class="text-xl custom-col"
                     id="Username"
                     label="Username"
                     label-for="username"
@@ -102,7 +102,7 @@
                   </b-form-group>
 
                   <b-form-group
-                    class="text-xl"
+                    class="text-xl custom-col"
                     id="Email"
                     label="Email"
                     label-for="email"
@@ -118,7 +118,7 @@
                   </b-form-group>
 
                   <b-form-group
-                    class="text-xl"
+                    class="text-xl custom-col"
                     id="Password"
                     label="Password"
                     label-for="password"
@@ -134,7 +134,7 @@
                   </b-form-group>
 
                   <b-form-group
-                    class="text-xl"
+                    class="text-xl custom-col"
                     id="Department"
                     label="Department"
                     label-for="department"
@@ -150,7 +150,7 @@
               </div>
               <div>
                 <b-form-group
-                  class="text-xl"
+                  class="text-xl custom-col"
                   id="Name"
                   label="Name"
                   label-for="name"
@@ -166,7 +166,7 @@
                 </b-form-group>
 
                 <b-form-group
-                  class="text-xl"
+                  class="text-xl custom-col"
                   id="Designation"
                   label="Designation"
                   label-for="designation"
@@ -182,7 +182,7 @@
                 </b-form-group>
 
                 <b-form-group
-                  class="text-xl"
+                  class="text-xl custom-col"
                   id="Password2"
                   label="Re-Enter Password"
                   label-for="password2"
@@ -198,7 +198,7 @@
                 </b-form-group>
 
                 <b-form-group
-                  class="text-xl"
+                  class="text-xl custom-col"
                   id="Role"
                   label="Role"
                   label-for="role"
@@ -209,7 +209,7 @@
                     :options="roles"
                     required
                   ></b-form-select>
-                  <vs-button @click="onSubmit" style="border-radius:5px; margin: 1em auto;" icon="add" color="warning" type="flat">Add</vs-button>
+                  <b-button style="border-radius:5px; margin: 1em auto; font-weight:bold ;background-color:#7367F0" icon="add" color="primary" type="submit">Add</b-button>
                 </b-form-group>
 
               </div>
@@ -259,6 +259,16 @@ export default {
         this.message = "";
       }, 3000);
     },
+    onReset(){
+    this.name='',
+    this.un='',
+    this.email='',
+    this.designation='',
+    this.password='',
+    this.password2='',
+    this.department=null,
+    this.role=''
+    },
     onSubmit: async function () {
       // e.preventDefault()
       var newUser = {
@@ -277,6 +287,7 @@ export default {
         newUser
       );
       this.showAlert(response);
+      this.onReset()
     },
     toggleStatus: function (status, index) {
       this.users[index].status = !status;
@@ -346,6 +357,21 @@ b-form-input :focus {
 }
 .customStyle{
   color: #7367F0;
+}
+.custom{
+	font-weight: bold;
+	color: #fff;
+	background-color: #10163a;
+}
+.custom-color{
+color: black;
+}
+.custom-color:nth-child(even){
+	background-color:#f2f2f2;
+}
+.custom-col{
+  color: #10163a;
+  font-weight: bold;
 }
 .footer-sidebar {
   display: flex;

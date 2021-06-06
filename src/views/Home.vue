@@ -31,10 +31,10 @@
 			</b-col>
 		</b-row><br><br>
 		<vx-card >
-			<p class="text-3xl">All Documents</p>
+			<p class="text-3xl customcolor">All Documents</p>
 			<div class="con-tab-ejemplo">
 				<vs-table max-items="5" search pagination :data="all_documents">
-					<div slot="thead" class="grid grid-cols-8 gap-4 custom">
+					<div slot="thead" class="grid grid-cols-8 gap-4 custom text-3xl">
 					<vs-th sort-key="_id" style="flex-grow:1">
 						Document ID
 					</vs-th>
@@ -62,7 +62,7 @@
 					</div>
 
 					<div slot-scope="{data}">
-					<vs-tr :state="tr.role == 'Super Admin'?'success':tr.role == 'Admin'?'primary':null" :key="indextr" v-for="(tr, indextr) in data" class="grid grid-cols-8 gap-4">
+					<vs-tr :state="tr.role == 'Super Admin'?'success':tr.role == 'Admin'?'primary':null" :key="indextr" v-for="(tr, indextr) in data" class="grid grid-cols-8 gap-4 custom-color">
 						<vs-td :data="data[indextr]._id">
 						{{data[indextr]._id}}
 						</vs-td>
@@ -158,8 +158,16 @@ export default{
 	}
 	.custom{
 	font-weight: bold;
+	color: #fff;
+	background-color: #10163a;
 }
-vs-th{
-	color:#fff;
+.customcolor{
+	color: #7367F0;
+}
+.custom-color{
+	color: black;
+}
+.custom-color:nth-child(even){
+	background-color:#f2f2f2;
 }
 </style>

@@ -234,7 +234,7 @@
         </vs-tabs>
     </div>
     <div class="parentx">
-      <vs-popup class="holamundo"  title="Add User" :active.sync="popupActivo">
+      <vs-popup class="holamundo"  style="color:#101639" title="Add User" :active.sync="popupActivo">
           <b-form @submit.stop.prevent>
             <b-form-group
               class="text-xl"
