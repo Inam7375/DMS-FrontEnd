@@ -1,5 +1,6 @@
 <template>
   <div>
+      <b-alert v-if="message.length > 0" class="alert" show dismissible fade:variant="messageVariant" >{{message}}</b-alert>
       <div style="margin-bottom: 1em">
           <div class="grid grid-cols-2 gap-6">
               <div>
@@ -19,36 +20,36 @@
           <vs-avatar color="success" class="shadow-xl" :text="String(index+1)"/>
       </div>
       <div class="col-span-9">
-          <vx-card>
+          <vx-card class="custom">
                 <div class="grid grid-cols-4">
-                    <div>
+                    <div class="textchange">
                         Forwarded To :
                     </div>
-                    <div>
+                    <div class="textcolor">
                         {{item.forwardedToUname}}
                     </div>
-                    <div>
+                    <div  class="textchange">
                         Forwarded To Dep :
                     </div>
-                    <div>
+                    <div class="textcolor">
                         {{item.forwardedDep}}
                     </div>
-                    <div>
+                    <div class="textchange">
                         Objection : 
                     </div>
-                    <div>
+                    <div class="textcolor">
                         {{item.objection}}
                     </div>
-                    <div>
+                    <div class="textchange">
                         Status : 
                     </div>
-                    <div>
+                    <div class="textcolor">
                         {{sequence[index][0]}}
                     </div>
-                    <div>
+                    <div class="textchange">
                         Comments : 
                     </div>
-                    <div class="col-span-3">
+                    <div class="col-span-3 textcolor">
                         {{item.comments}}
                     </div>
                 </div>      
@@ -56,9 +57,9 @@
         </div>
       </div>
       <div class="parentx">
-      <vs-popup class="holamundo"  title="Add User" :active.sync="popupActivo">
-          <b-form @submit.stop.prevent>
-            <div class="grid grid-cols-2 gap-4">
+      <vs-popup class="holamundo"  title="Add Update" :active.sync="popupActivo">
+          <b-form @submit="onSubmit" @submit.stop.prevent>
+            <div class="grid grid-cols-2 gap-4"  style="color:#101639">
               <div>
                  <b-form-group
                     class="text-xl"
@@ -136,15 +137,16 @@
                         required
                         ></b-form-input>
                     </b-form-group>
+                    <b-button style="border-radius:5px; margin: 1em auto; background-color:#7367F0" icon="add" color="primary" type="submit">Update</b-button>
             </b-form>
 
-        <vs-button @click="onSubmit" style="border-radius:5px; margin: 1em auto;" icon="add" color="info" type="flat">Update</vs-button>
+        
       </vs-popup>
     </div>
         <vs-popup class="holamundo"  title="Confirmation" :active.sync="popupActivo2">
             <p style="font-size:1.5em">Mark Document As Completed</p>
             <br><br>
-            <div class="grid grid-cols-2 gap-4">
+            <div class="grid grid-cols-2 gap-4"  style="color:#101639">
                 <div>
                     <vs-button style="width:100%" @click="popupActivo2=false" color="danger" type="border">Cancel</vs-button>
                 </div>
@@ -173,14 +175,34 @@ export default{
         comments: "",
         status: "Pending",
         sequence: [],
-        logList : []
+        logList : [],
+         message:'',
+    messageVariant:''
     }),
     methods: {
-
+    showAlert:function(res){
+     this.message=res.data.msg;
+     if(res.status=='201'){
+        this.messageVariant='success'
+      }
+      else if(res.status=='203'){
+        this.messageVariant='danger'
+      }
+      setTimeout(()=>{
+         this.message=''
+      }, 3000)
+    },
+onReset(){
+        this.forwardedToUname ='',
+        this.forwardedDep='',
+        this.objection='',
+        this.comments=''
+},
         confirmComplete: async function() {
             if(this.checkBox){
-                const res = await axios.put('http://localhost:5000/api/updatedocuments' , {'docID': this.$route.params.docID})
+                const response = await axios.put('http://localhost:5000/api/updatedocuments' , {'docID': this.$route.params.docID})
                 console.log(res.data.msg)
+                 this.showAlert(response)
             }
             this.popupActivo2 = false
         },
@@ -241,6 +263,8 @@ export default{
             const log_api_resp = await axios.put(`http://localhost:5000/api/logs/${this.$route.params.docID}`, newLog)
             const approved_docs_api_resp = await axios.put(`http://localhost:5000/api/userapproveddocuments/${username}`, {'docID' : this.$route.params.docID})
             const notification_api_resp = await axios.put(`http://localhost:5000/api/usernotify/${username}`, {'docID' : this.$route.params.docID})
+            this.showAlert(log_api_resp)
+            this.Reset()
         }
     },
     created(){
@@ -249,3 +273,20 @@ export default{
     },
 }
 </script>
+<style lang="scss">
+.alert{
+ text-align: center;
+ width: 750px;
+ height: 40px;
+ font-weight: bold;
+}
+.custom {
+  background-color: #10163a;
+}
+.textchange {
+  color: aliceblue;
+}
+.textcolor {
+  color: rgba(234, 239, 243, 0.829);
+}
+</style>
