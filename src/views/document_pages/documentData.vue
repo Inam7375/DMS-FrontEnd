@@ -201,7 +201,6 @@ onReset(){
         confirmComplete: async function() {
             if(this.checkBox){
                 const response = await axios.put('http://localhost:5000/api/updatedocuments' , {'docID': this.$route.params.docID})
-                console.log(res.data.msg)
                  this.showAlert(response)
             }
             this.popupActivo2 = false
@@ -227,8 +226,6 @@ onReset(){
                 }else{
                     this.sequence.push(['Pending'])
                 }
-                console.log(this.logList)
-                console.log(this.sequence)
             }
         },
         onSubmit : async function(){

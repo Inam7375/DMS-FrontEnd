@@ -248,7 +248,7 @@ export default {
     },
     onSubmit: async function () {
       var newDepartment = {
-        _id: this.depName.toLowerCase(),
+        _id: this.depName,
         depHOD: this.depHOD,
         about: this.about,
       };

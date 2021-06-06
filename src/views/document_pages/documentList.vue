@@ -277,13 +277,12 @@
                     label-for="targetUser"
                     description="Name of the final destination person."
                   >
-                    <b-form-input
-                      id="targetUser"
-                      v-model="targetUser"
-                      type="text"
-                      placeholder="Steven Smith"
-                      required
-                    ></b-form-input>
+                    <b-form-select
+                    id="role"
+                    v-model="targetUser"
+                    :options="users"
+                    required
+                  ></b-form-select>
                   </b-form-group>
 
               </div>
@@ -297,6 +296,7 @@
                 >
                   <b-form-input
                     id="frmDep"
+                    disabled
                     v-model="frmDep"
                     type="text"
                     placeholder="Computer Science"
@@ -311,12 +311,13 @@
                   label-for="targetDep"
                   description="Name of the target department."
                 >
-                  <b-form-input
-                    id="targetDep"
-                    v-model="targetDep"
-                    type="text"
-                    required
-                  ></b-form-input>
+                  <b-form-select
+                      id="department"
+                      v-model="targetDep"
+                      :options="departments"
+                      required
+                    ></b-form-select>
+                  </b-form-group>
                 </b-form-group>
 
               </div>
@@ -362,6 +363,8 @@ data:()=>({
     targetUser: "",
     targetDep: "",
     dsc: "",
+    departments: [],
+    users : [],
     all_documents:[],
     all_documents_created:[],
     all_documents_completed:[],
@@ -396,9 +399,8 @@ data:()=>({
       const response = await axios.put('http://localhost:5000/api/archivedocuments',{
         _id: docID
       })
-      // this.$delete(this.someItems, itemIndex)
-       this.showAlert(response)
-      console.log(response.data.msg)
+      this.$delete(this.all_documents_completed, index)
+      this.showAlert(response)
 
     },
     toggleCreator : function() {
@@ -426,28 +428,37 @@ data:()=>({
         description: this.dsc,
       }
       this.all_documents.push(newDocument)
-      console.log(newDocument['_id'])
       this.popupActivo = false
       const response = await axios.post('http://localhost:5000/api/documents', newDocument)
        this.showAlert(response)
        this.onReset()
-      console.log(response.data.msg)
+       get_all_documents()
     },
 
     get_all_documents: async function() {
       const payload = VueJwtDecode.decode(localStorage.getItem('access-token'))
       this.payloadUname = payload['username']
       this.frmUser = payload['username']
+      this.frmDep = payload['department']
       const res = await axios.get(`http://localhost:5000/api/userdocuments/${this.payloadUname}`)
-      console.log(res.data.results)
       this.all_documents = res.data.results
+      const response = await axios.get("http://localhost:5000/api/departments")
+      const deps = response.data.results
+      for (var x in deps){
+        this.departments.push(deps[x]['_id']) 
+      }
+
+      const resp = await axios.get("http://localhost:5000/api/users")
+      const users = resp.data.results
+      for (var x in users){
+        this.users.push(users[x]['_id']) 
+      }
     } ,
 
     get_all_documents_completed: async function() {
       const payload = VueJwtDecode.decode(localStorage.getItem('access-token'))
       this.payloadUname = payload['username']
       const res = await axios.get(`http://localhost:5000/api/usercompleteddocuments/${this.payloadUname}`)
-      console.log(res.data.results)
       this.all_documents_completed = res.data.results
     } ,
 
@@ -455,7 +466,6 @@ data:()=>({
       const payload = VueJwtDecode.decode(localStorage.getItem('access-token'))
       this.payloadUname = payload['username']
       const res = await axios.get(`http://localhost:5000/api/userpendingdocuments/${this.payloadUname}`)
-      console.log(res.data.results)
       this.all_documents_pending = res.data.results
     } ,
   },

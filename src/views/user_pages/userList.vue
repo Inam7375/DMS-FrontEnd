@@ -13,7 +13,7 @@
         <template slot="header">
           <vs-button @click="popupActivo=true" style="border-radius:5px;" color="primary" type="filled" icon="person_add">Add User</vs-button>
         </template>
-        <div slot="thead" class="grid grid-cols-7 gap-4 custom text-3xl">
+        <slot="thead" class="grid grid-cols-7 gap-4 custom text-3xl">
           <vs-th sort-key="name" style="flex-grow:1">
             Full Name
           </vs-th>
@@ -38,7 +38,7 @@
           <vs-th sort-key="role" style="flex-grow:1">
             Actions  
           </vs-th>
-        </div>
+        </slot=>
 
         <div slot-scope="{data}">
           <vs-tr :state="tr.role == 'Super Admin'?'success':null" :key="tr._id" v-for="(tr, indextr) in data" class="grid grid-cols-7 gap-4 custom-color">
@@ -63,7 +63,7 @@
             </vs-td>
             <vs-td >
               <vs-chip :color="tr.status ? 'primary' : 'danger'">
-                <vs-avatar @click='toggleStatus(tr.status, indextr)'  icon="edit" />
+                <vs-avatar @click='toggleStatus(tr._id)'  icon="edit" />
                 {{data[indextr].status ? "active" : "not active" }}
               </vs-chip>
             </vs-td>
@@ -232,7 +232,7 @@ export default {
   },
   data: () => ({
     selected: false,
-    departments: ["BBA", "CS", "Applied Physics", "Electrical Engineering"],
+    departments: [],
     roles: ["Admin", "Super Admin", "DTO"],
     popupActivo: false,
     name: "",
@@ -288,13 +288,21 @@ export default {
       );
       this.showAlert(response);
       this.onReset()
+      response.status == "201" ? this.get_all_users() : null
     },
-    toggleStatus: function (status, index) {
-      this.users[index].status = !status;
+    toggleStatus: async function (uname) {
+      const response = await axios.put("http://localhost:5000/api/updateuser", {'_id':uname})
+      this.showAlert(response)
+      response.status == "201" ? this.get_all_users() : null
     },
     get_all_users: async function () {
       const res = await axios.get("http://localhost:5000/api/users");
       this.all_users = res.data.results;
+      const response = await axios.get("http://localhost:5000/api/departments")
+      const deps = response.data.results
+      for (var x in deps){
+        this.departments.push(deps[x]['_id']) 
+      }
     },
     ...mapActions(["fetchUsers"]),
   },
