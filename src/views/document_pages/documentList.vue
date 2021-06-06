@@ -149,6 +149,7 @@
                             <router-link :to="{name: 'document', params: {docID: tr._id}}">
                               <vs-button radius size="large" line-position="left" color="success" type="flat" icon="edit"></vs-button>
                             </router-link>
+                            <vs-button @click="archiveDocuments(indextr, tr._id)" radius size="large" color="danger" type="flat" icon="delete"></vs-button>
                           </div>
                       </vs-td>
                     </vs-tr>
@@ -365,6 +366,14 @@ data:()=>({
     all_documents_pending:[],
   }),
   methods: {
+    archiveDocuments : async function(index, docID) {
+      const response = await axios.put('http://localhost:5000/api/archivedocuments',{
+        _id: docID
+      })
+      // this.$delete(this.someItems, itemIndex)
+      console.log(response.data.msg)
+
+    },
     toggleCreator : function() {
       localStorage.setItem('isCreator', true)
       this.$store.state.isCreator = true
