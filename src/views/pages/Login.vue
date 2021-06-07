@@ -29,7 +29,8 @@
                 class="alert"
                 show
                 dismissible
-                fade:variant="messageVariant"
+                fade
+                :variant="messageVariant"
                 >{{ message }}</b-alert
               >
 
@@ -98,8 +99,14 @@ export default {
         password: this.password,
       });
       if (localStorage.getItem('access-token') == null){
-        this.message = "Invalid Crdentials"
+       setTimeout(() => {
+        this.message = "Invalid Crdentials!"
+        this.messageVariant="danger"
+      }, 1000);
       }
+      setTimeout(() => {
+        this.message=''
+      }, 3000);
     },
   },
 };
