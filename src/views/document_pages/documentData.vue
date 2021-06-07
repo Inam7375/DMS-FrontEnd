@@ -12,7 +12,7 @@
           </div>
 
       </div>
-      <div class="grid grid-cols-12" style="margin-bottom: .5em" :key="index" v-for="(item, index) in logList">
+      <div class="grid grid-cols-12" style="margin-bottom: .5em; color:black" :key="index" v-for="(item, index) in logList">
       <div class="col-span-2" style="margin: auto">
           {{item.date}}
       </div>
