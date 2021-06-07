@@ -248,7 +248,7 @@ export default {
     },
     onSubmit: async function () {
       var newDepartment = {
-        _id: this.depName,
+        _id: this.depName.toUpperCase(),
         depHOD: this.depHOD,
         about: this.about,
       };
@@ -260,7 +260,7 @@ export default {
       if (response.status == "201") {
         this.allDepartments.push(newDepartment);
         this.popupActivo = false;
-        this.onReset()
+        this.onReset();
       }
     },
     onSubmitUpdate: async function (index) {
