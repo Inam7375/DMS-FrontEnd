@@ -17,8 +17,16 @@
           <div class="con-tab-ejemplo">
             <vs-tab @click="colorx = '#0984e3'" label="Created Documents">
               <div class="con-tab-ejemplo">
+                <div class="grid grid-cols-8">
+                  <div>
+                    <p style="font-size:15px; font-weight:bold; padding-top:.5em; padding-left:2em;">Filter Entries : </p>
+                  </div>
+                  <div class="col-span-7">
+                    <b-form-select style="width:20%; font-size:20px; border-radius:10px;" v-model="selectedEntry" :options="entryOptions"></b-form-select>
+                  </div>
+                </div>
                 
-                <vs-table max-items="5" search pagination :data="all_documents">
+                <vs-table :max-items="selectedEntry" search pagination :data="all_documents">
                   <div slot="thead" class="grid grid-cols-8 gap-4 custom text-3xl">
                     <vs-th sort-key="_id" style="flex-grow:1">
                       Document ID
@@ -88,8 +96,24 @@
             </vs-tab>
             <vs-tab @click="colorx = 'success'" label="Completed Documents">
               <div class="con-tab-ejemplo">
+                <div class="grid grid-cols-8">
+                  <div>
+                    <p style="font-size:15px; font-weight:bold; padding-top:.5em; padding-left:2em;">Filter Entries : </p>
+                  </div>
+                  <div class="col-span-7">
+                    <b-form-select style="width:20%; font-size:20px; border-radius:10px;" v-model="selectedEntry" :options="entryOptions"></b-form-select>
+                  </div>
+                </div>
                 
-                <vs-table max-items="5" search pagination :data="all_documents_completed">
+                <vs-table :max-items="selectedEntry" search pagination :data="all_documents_completed">
+                  <div class="grid grid-cols-8">
+                    <div>
+                      <p style="font-size:15px; font-weight:bold; padding-top:.5em; padding-left:2em;">Filter Entries : </p>
+                    </div>
+                    <div class="col-span-7">
+                      <b-form-select style="width:20%; font-size:20px; border-radius:10px;" v-model="selectedEntry" :options="entryOptions"></b-form-select>
+                    </div>
+                  </div>
                   <div slot="thead" class="grid grid-cols-8 gap-4 custom text-3xl">
                     <vs-th sort-key="_id" style="flex-grow:1">
                       Document ID
@@ -160,8 +184,15 @@
             </vs-tab>
             <vs-tab @click="colorx = 'warning'" label="Pending">
               <div class="con-tab-ejemplo">
-                
-                <vs-table max-items="5" search pagination :data="all_documents_pending">
+                <div class="grid grid-cols-8">
+                  <div>
+                    <p style="font-size:15px; font-weight:bold; padding-top:.5em; padding-left:2em;">Filter Entries : </p>
+                  </div>
+                  <div class="col-span-7">
+                    <b-form-select style="width:20%; font-size:20px; border-radius:10px;" v-model="selectedEntry" :options="entryOptions"></b-form-select>
+                  </div>
+                </div>
+                <vs-table :max-items="selectedEntry" search pagination :data="all_documents_pending">
                   <div slot="thead" class="grid grid-cols-8 gap-4 custom text-3xl">
                     <vs-th sort-key="_id" style="flex-grow:1">
                       Document ID
@@ -353,6 +384,7 @@ components: {
 },
 data:()=>({
     selected:false,
+    selectedEntry: 5,
     popupActivo: false,
     colorx: '#0984e3',
     payloadUname: "",
@@ -369,8 +401,18 @@ data:()=>({
     all_documents_created:[],
     all_documents_completed:[],
     all_documents_pending:[],
-     message:'',
-    messageVariant:''
+    message:'',
+    messageVariant:'',
+    entryOptions: [
+      { value: 5, text: '5'},
+      { value: 10, text: '10'},
+      { value: 20, text: '20'},
+      { value: 30, text: '30'},
+      { value: 40, text: '40'},
+      { value: 50, text: '50'},
+      { value: 70, text: '70'},
+      { value: 100, text: '100'}
+    ]
   }),
   methods: {
     showAlert:function(res){
@@ -439,8 +481,8 @@ data:()=>({
       const payload = VueJwtDecode.decode(localStorage.getItem('access-token'))
       this.payloadUname = payload['username']
       this.frmUser = payload['username']
-      // this.frmDep = payload['department']
-      const res = await axios.get(`http://localhost:5000/api/userdocuments/${this.payloadUname}`)
+      this.frmDep = payload['department']
+      const res = await axios.get(`http://localhost:5000/api/userdocuments/${this.payloadUname}`) 
       this.all_documents = res.data.results
       const user = await axios.get(`http://localhost:5000/api/user/${this.payloadUname}`)
       this.frmDep = user.data.department
