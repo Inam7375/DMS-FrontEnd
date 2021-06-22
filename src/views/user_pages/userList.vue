@@ -13,6 +13,7 @@
         <template slot="header">
           <vs-button @click="popupActivo=true" style="border-radius:5px;" color="primary" type="filled" icon="person_add">Add User</vs-button>
         </template>
+        </template>
         <slot="thead" class="grid grid-cols-7 gap-4 custom text-3xl">
           <vs-th sort-key="name" style="flex-grow:1">
             Full Name
@@ -41,7 +42,7 @@
         </slot=>
 
         <div slot-scope="{data}">
-          <vs-tr :state="tr.role == 'Super Admin'?'success':null" :key="tr._id" v-for="(tr, indextr) in data" class="grid grid-cols-7 gap-4 custom-color">
+          <vs-tr :state="tr.role == 'Super Admin'?'success':null" :key="tr._id" v-if="tr.role=='Super Admin'" v-for="(tr, indextr) in data" class="grid grid-cols-7 gap-4 custom-color">
             <vs-td >
               {{data[indextr].name}}
             </vs-td>
