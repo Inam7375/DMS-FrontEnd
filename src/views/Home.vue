@@ -33,7 +33,15 @@
 		<vx-card >
 			<p class="text-3xl customcolor">All Documents</p>
 			<div class="con-tab-ejemplo">
-				<vs-table max-items="5" search pagination :data="all_documents">
+				<div class="grid grid-cols-6" style="margin-left:30%;">
+					<div>
+					<p style="font-size:15px; font-weight:bold; padding-top:.5em; padding-left:2em;">Filter Entries : </p>
+					</div>
+					<div class="col-span-5">
+					<b-form-select style="width:20%; font-size:20px; border-radius:10px;" v-model="selectedEntry" :options="entryOptions"></b-form-select>
+					</div>
+				</div>
+				<vs-table :max-items="selectedEntry" search pagination :data="all_documents">
 					<div slot="thead" class="grid grid-cols-8 gap-4 custom text-3xl">
 					<vs-th sort-key="_id" style="flex-grow:1">
 						Document ID
@@ -114,12 +122,23 @@ export default{
 	data () {
 		return {
 			isAdmin : false,
+			selectedEntry:"5",
 			value1: "",
 			payloadUname: "",
 			userCreatedDocs: "",
 			userPendingDocs: "",
 			userCompletedDocs: "",
-			all_documents: []
+			all_documents: [],
+			entryOptions: [
+				{ value: 5, text: '5'},
+				{ value: 10, text: '10'},
+				{ value: 20, text: '20'},
+				{ value: 30, text: '30'},
+				{ value: 40, text: '40'},
+				{ value: 50, text: '50'},
+				{ value: 70, text: '70'},
+				{ value: 100, text: '100'}
+			]
 
 		}
 	},

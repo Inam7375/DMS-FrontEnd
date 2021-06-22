@@ -8,8 +8,15 @@
         <p class="text-3xl customStyle">Users List</p>
         <p>You can search registered users here.</p>
       </vx-card>
-      
-      <vs-table max-items="5" search pagination :data="all_users">
+      <div class="grid grid-cols-6" style="margin-left:30%;">
+        <div>
+          <p style="font-size:15px; font-weight:bold; padding-top:.5em; padding-left:2em;">Filter Entries : </p>
+        </div>
+        <div class="col-span-5">
+          <b-form-select style="width:20%; font-size:20px; border-radius:10px;" v-model="selectedEntry" :options="entryOptions"></b-form-select>
+        </div>
+      </div>
+      <vs-table :max-items="selectedEntry" search pagination :data="all_users">
         <template slot="header">
           <vs-button @click="popupActivo=true" style="border-radius:5px;" color="primary" type="filled" icon="person_add">Add User</vs-button>
         </template>
@@ -232,6 +239,7 @@ export default {
   },
   data: () => ({
     selected: false,
+    selectedEntry:5,
     departments: [],
     roles: ["Admin", "Super Admin", "DTO"],
     popupActivo: false,
@@ -246,6 +254,16 @@ export default {
     all_users: [],
     message: "",
     messageVariant: "",
+    entryOptions: [
+      { value: 5, text: '5'},
+      { value: 10, text: '10'},
+      { value: 20, text: '20'},
+      { value: 30, text: '30'},
+      { value: 40, text: '40'},
+      { value: 50, text: '50'},
+      { value: 70, text: '70'},
+      { value: 100, text: '100'}
+    ]
   }),
   methods: {
     showAlert: function (res) {
