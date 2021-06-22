@@ -18,14 +18,14 @@
 			<b-col class="flex-grow">
 				<vx-card class="image" style="height:15em">
 					<b-avatar class="mt-2" variant="primary" size="lg" icon="file-bar-graph"/><br>
-					<p style="color:white" class="text-5xl font-bold 	subpixel-antialiased">20</p>
+					<p style="color:white" class="text-5xl font-bold 	subpixel-antialiased">{{userPendingDocs}}</p>
 					<p style="color:white" class="text-2xl subpixel-antialiased">Pending Documents</p>
 				</vx-card>
 			</b-col>
 			<b-col class="flex-grow">
 				<vx-card class="image" style="height:15em">
 					<b-avatar class="mt-2" variant="primary" size="lg" icon="file-bar-graph"/><br>
-					<p style="color:white" class="text-5xl font-bold 	subpixel-antialiased">30</p>
+					<p style="color:white" class="text-5xl font-bold 	subpixel-antialiased">{{userCompletedDocs}}</p>
 					<p style="color:white" class="text-2xl subpixel-antialiased">Forwarded Documents</p>
 				</vx-card>
 			</b-col>
@@ -116,6 +116,9 @@ export default{
 			isAdmin : false,
 			value1: "",
 			payloadUname: "",
+			userCreatedDocs: "",
+			userPendingDocs: "",
+			userCompletedDocs: "",
 			all_documents: []
 
 		}
@@ -132,6 +135,17 @@ export default{
 				const res = await axios.get(`http://localhost:5000/api/userdocuments/${this.payloadUname}`)
 				this.all_documents = res.data.results
 			}
+		},
+		count_all_documents: async function() {
+			const user_created = await axios.get(`http://localhost:5000/api/userdocuments/${this.payloadUname}`) 
+			this.userCreatedDocs = user_created.data.results.length
+			const user_completed = await axios.get(`http://localhost:5000/api/usercompleteddocuments/${this.payloadUname}`)
+			this.userCompletedDocs = user_completed.data.results.length
+			const user_pending = await axios.get(`http://localhost:5000/api/userpendingdocuments/${this.payloadUname}`)
+			this.userPendingDocs = user_pending.data.results.length
+			// console.log(user_created)
+			// console.log(user_completed)
+			// console.log(user_pending)
 		}
 	},
 	created() {
@@ -141,6 +155,7 @@ export default{
 			this.isAdmin = false
 		}
 		this.get_all_documents()
+		// this.count_all_documents()
 	}
 }
 </script>
