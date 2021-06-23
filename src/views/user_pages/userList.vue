@@ -302,7 +302,7 @@ export default {
       );
       this.showAlert(response);
       this.onReset()
-      response.status == "201" ? this.get_all_users() : null
+      // response.status == "201" ? this.get_all_users() : null
     },
     toggleStatus: async function (uname) {
       const response = await axios.put("http://localhost:5000/api/updateuser", {'_id':uname})
