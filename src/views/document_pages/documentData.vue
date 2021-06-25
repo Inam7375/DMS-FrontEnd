@@ -12,7 +12,7 @@
           </div>
 
       </div>
-      <div class="grid grid-cols-12" style="margin-bottom: .5em" :key="index" v-for="(item, index) in logList">
+      <div class="grid grid-cols-12" style="margin-bottom: .5em; color:black" :key="index" v-for="(item, index) in logList">
       <div class="col-span-2" style="margin: auto">
           {{item.date}}
       </div>
@@ -61,19 +61,19 @@
           <b-form @submit="onSubmit" @submit.stop.prevent>
             <div class="grid grid-cols-2 gap-4"  style="color:#101639">
               <div>
-                 <b-form-group
+                  <b-form-group
                     class="text-xl"
-                    id="ForwardTo"
-                    label="Forward To Username"
-                    label-for="forwardToUname"
+                    id="ForwardedTo"
+                    label="Forwarded To"
+                    label-for="targetUser"
+                    description="Name of the final destination person."
                   >
-                    <b-form-input
-                      id="forwardedToUname"
-                      v-model="forwardedToUname"
-                      type="text"
-                      placeholder="John123"
-                      required
-                    ></b-form-input>
+                    <b-form-select
+                    id="role"
+                    v-model="targetUser"
+                    :options="users"
+                    required
+                  ></b-form-select>
                   </b-form-group>
 
                   <b-form-group
@@ -93,19 +93,19 @@
               </div>
               <div>
                 <b-form-group
-                class="text-xl"
-                id="ForwardedDep"
-                label="Forward To Department"
-                label-for="forwardedDep"
+                  class="text-xl"
+                  id="ForwardDep"
+                  label="Target Department"
+                  label-for="targetDep"
+                  description="Name of the target department."
                 >
-                    <b-form-input
-                        id="forwardedDep"
-                        v-model="forwardedDep"
-                        type="text"
-                        placeholder="Computer Science"
-                        required
-                    ></b-form-input>
-                </b-form-group>
+                  <b-form-select
+                      id="department"
+                      v-model="targetDep"
+                      :options="departments"
+                      required
+                    ></b-form-select>
+                  </b-form-group>
 
                 <b-form-group
                     class="text-xl"
@@ -176,6 +176,8 @@ export default{
         status: "Pending",
         sequence: [],
         logList : [],
+         departments: [],
+       users : [],
          message:'',
     messageVariant:''
     }),
@@ -206,13 +208,23 @@ onReset(){
             this.popupActivo2 = false
         },
 
-        addUpdate : function() {
+        addUpdate :async function() {
             
             if(this.checkBox != true){
                 this.popupActivo=true
             } else {
                 this.popupActivo2=true
             }
+             const resp = await axios.get("http://localhost:5000/api/users")
+            const users = resp.data.results
+           for (var x in users){
+            this.users.push(users[x]['_id']) 
+      }
+       const response = await axios.get("http://localhost:5000/api/departments")
+      const deps = response.data.results
+      for (var x in deps){
+        this.departments.push(deps[x]['_id']) 
+      }
         },
 
         getLogs : async function(){
@@ -227,6 +239,7 @@ onReset(){
                     this.sequence.push(['Pending'])
                 }
             }
+            
         },
         onSubmit : async function(){
             var objToday = new Date(),

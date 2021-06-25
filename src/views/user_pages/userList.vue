@@ -20,7 +20,7 @@
         <template slot="header">
           <vs-button @click="popupActivo=true" style="border-radius:5px;" color="primary" type="filled" icon="person_add">Add User</vs-button>
         </template>
-        <slot="thead" class="grid grid-cols-7 gap-4 custom text-3xl">
+        <div slot="thead" class="grid grid-cols-7 gap-4 custom text-3xl">
           <vs-th sort-key="name" style="flex-grow:1">
             Full Name
           </vs-th>
@@ -30,9 +30,6 @@
           <vs-th  sort-key="avatar" style="flex-grow:1">
             Avatar
           </vs-th>
-          <!-- <vs-th sort-key="role" style="flex-grow:1">
-            Avatar 
-          </vs-th> -->
           <vs-th sort-key="department" style="flex-grow:2">
             Department
           </vs-th>
@@ -45,8 +42,7 @@
           <vs-th sort-key="role" style="flex-grow:1">
             Actions  
           </vs-th>
-        </slot=>
-
+        </div>
         <div slot-scope="{data}">
           <vs-tr :state="tr.role == 'Super Admin'?'success':null" :key="tr._id" v-for="(tr, indextr) in data" class="grid grid-cols-7 gap-4 custom-color">
             <vs-td >
@@ -306,7 +302,7 @@ export default {
       );
       this.showAlert(response);
       this.onReset()
-      response.status == "201" ? this.get_all_users() : null
+      // response.status == "201" ? this.get_all_users() : null
     },
     toggleStatus: async function (uname) {
       const response = await axios.put("http://localhost:5000/api/updateuser", {'_id':uname})
@@ -326,7 +322,6 @@ export default {
   },
   computed: {
     ...mapGetters(["allUsers"]),
-
     validatePass() {
       return this.password.length > 7 && this.password.length < 13;
     },
@@ -345,7 +340,6 @@ export default {
 b-form-input :focus {
   background-color: #101639;
 }
-
 .labelx,
 .vs-input {
   margin: 10px;

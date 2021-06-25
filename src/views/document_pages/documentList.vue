@@ -330,7 +330,7 @@
                     disabled
                     v-model="frmDep"
                     type="text"
-                    placeholder="Computer Science"
+                    placeholder=" Department"
                     required
                   ></b-form-input>
                 </b-form-group>
@@ -484,6 +484,8 @@ data:()=>({
       this.frmDep = payload['department']
       const res = await axios.get(`http://localhost:5000/api/userdocuments/${this.payloadUname}`) 
       this.all_documents = res.data.results
+      const user = await axios.get(`http://localhost:5000/api/user/${this.payloadUname}`)
+      this.frmDep = user.data.department
       const response = await axios.get("http://localhost:5000/api/departments")
       const deps = response.data.results
       for (var x in deps){
