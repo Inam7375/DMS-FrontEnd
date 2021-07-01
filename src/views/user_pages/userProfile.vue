@@ -171,8 +171,8 @@ export default {
   },
   data: () => ({
     selected: false,
-    departments: ["BBA", "CS", "Applied Physics", "Electrical Engineering"],
-    roles: ["Admin", "Super Admin", "DTO"],
+    departments: [],
+    roles: ["Admin", "Super Admin", "DTO","User"],
     popupActivo: false,
     name: "",
     username: "",
@@ -230,6 +230,11 @@ export default {
     // this.password = user.password
     // this.password2 = user.password
     this.role = user.role;
+    const response = await axios.get("http://localhost:5000/api/departments")
+      const deps = response.data.results
+      for (var x in deps){
+        this.departments.push(deps[x]['_id']) 
+      }
   },
    computed : {
     validatePass() {

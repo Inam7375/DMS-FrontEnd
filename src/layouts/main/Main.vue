@@ -123,6 +123,7 @@ import TheNavbarVertical   from '@/layouts/components/navbar/TheNavbarVertical.v
 import TheFooter           from '@/layouts/components/TheFooter.vue'
 import themeConfig         from '@/../themeConfig.js'
 import VNavMenu            from '@/layouts/components/vertical-nav-menu/VerticalNavMenu.vue'
+import VueJwtDecode from 'vue-jwt-decode';
 
 export default {
   components: {
@@ -212,11 +213,27 @@ export default {
     const color = this.navbarColor === '#fff' && this.isThemeDark ? '#10163a' : this.navbarColor
     this.updateNavbarColor(color)
     this.setNavMenuVisibility(this.$store.state.mainLayoutType)
-    if(localStorage.getItem('isAdmin') == "true"){
-      this.navMenuItems = navMenuItems[0]
-    }else{
-      this.navMenuItems = navMenuItems[1]
-    }
+    const payload = VueJwtDecode.decode(localStorage.getItem('access-token'))
+    console.log(payload)
+    if(payload['role']==="Super Admin"){
+     this.navMenuItems = navMenuItems[0]
+     }
+     else if(payload['role']==="Admin")
+     {
+     this.navMenuItems = navMenuItems[1]
+     }
+       else if(payload['role']==="User")
+        {
+     this.navMenuItems = navMenuItems[2]
+     }
+     else{
+       this.navMenuItems = navMenuItems[1]
+     }
+    // if(localStorage.getItem('isAdmin') == "true"){
+    //   this.navMenuItems = navMenuItems[0]
+    // }else{
+    //   this.navMenuItems = navMenuItems[1]
+    // }
   }
 }
 

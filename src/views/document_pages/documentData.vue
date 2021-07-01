@@ -70,7 +70,7 @@
                   >
                     <b-form-select
                     id="role"
-                    v-model="targetUser"
+                    v-model="forwardedToUname"
                     :options="users"
                     required
                   ></b-form-select>
@@ -101,7 +101,7 @@
                 >
                   <b-form-select
                       id="department"
-                      v-model="targetDep"
+                      v-model="forwardedDep"
                       :options="departments"
                       required
                     ></b-form-select>

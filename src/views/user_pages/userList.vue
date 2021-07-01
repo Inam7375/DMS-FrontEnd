@@ -237,7 +237,7 @@ export default {
     selected: false,
     selectedEntry:5,
     departments: [],
-    roles: ["Admin", "Super Admin", "DTO"],
+    roles: ["Admin", "Super Admin", "DTO","User"],
     popupActivo: false,
     name: "",
     un: "",
