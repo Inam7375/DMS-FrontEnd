@@ -35,7 +35,7 @@
 				<vx-card class="image" style="height:15em">
 				
 					<p style="color:white" class="text-2xl subpixel-antialiased">
-						Completed Documents Documents
+						Completed Documents
 					</p>
 						<p style="color:white" class="text-5xl font-bold 	subpixel-antialiased">{{userCompletedDocs.length}}</p>
 				</vx-card>
