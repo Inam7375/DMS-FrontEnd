@@ -22,7 +22,7 @@
                 </div>
               </div>
             </router-link>
-              <small class="mt-1 whitespace-no-wrap">{{ elapsedTime(ntf.time) }}</small>
+              <small class="mt-1 whitespace-no-wrap">{{ntf.time}}</small>
           </li>
         </ul>
       </component>
@@ -44,7 +44,7 @@
         border-solid
         d-theme-border-grey-light
         cursor-pointer">
-        <span>View All Notifications</span>
+        <span>All Notifications</span>
       </div>
     </vs-dropdown-menu>
   </vs-dropdown>
