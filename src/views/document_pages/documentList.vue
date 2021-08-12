@@ -27,7 +27,7 @@
                 </div>
                 
                 <vs-table :max-items="selectedEntry" search pagination :data="all_documents">
-                  <div slot="thead" class="grid grid-cols-8 gap-4 custom text-3xl">
+                  <div slot="thead" class="grid grid-cols-9 gap-4 custom text-3xl">
                     <vs-th sort-key="_id" style="flex-grow:1">
                       Document ID
                     </vs-th>
@@ -36,6 +36,9 @@
                     </vs-th>
                     <vs-th sort-key="created_by_user" style="flex-grow:1"> 
                       Created By
+                    </vs-th>
+                    <vs-th sort-key="created_by_user" style="flex-grow:1"> 
+                      Final Destination
                     </vs-th>
                     <vs-th  sort-key="created_by_department" style="flex-grow:1"> 
                       From Dep
@@ -55,7 +58,7 @@
                   </div>
 
                   <div slot-scope="{data}">
-                    <vs-tr :state="tr.role == 'Super Admin'?'success':tr.role == 'Admin'?'primary':null" :key="indextr" v-for="(tr, indextr) in data" class="grid grid-cols-8 gap-4 custom-color">
+                    <vs-tr :state="tr.role == 'Super Admin'?'success':tr.role == 'Admin'?'primary':null" :key="indextr" v-for="(tr, indextr) in data" class="grid grid-cols-9 gap-4 custom-color">
                       <vs-td :data="data[indextr]._id">
                         {{data[indextr]._id}}
                       </vs-td>
@@ -65,6 +68,10 @@
 
                       <vs-td :data="tr.created_by_user">
                         {{tr.created_by_user}}
+                      </vs-td>
+
+                      <vs-td :data="tr.final_user">
+                        {{tr.final_user}}
                       </vs-td>
 
                       <vs-td :data="tr.created_by_department">
@@ -114,7 +121,7 @@
                       <b-form-select style="width:20%; font-size:20px; border-radius:10px;" v-model="selectedEntry" :options="entryOptions"></b-form-select>
                     </div>
                   </div>
-                  <div slot="thead" class="grid grid-cols-8 gap-4 custom text-3xl">
+                  <div slot="thead" class="grid grid-cols-9 gap-4 custom text-3xl">
                     <vs-th sort-key="_id" style="flex-grow:1">
                       Document ID
                     </vs-th>
@@ -123,6 +130,9 @@
                     </vs-th>
                     <vs-th sort-key="created_by_user" style="flex-grow:1"> 
                       Created By
+                    </vs-th>
+                    <vs-th sort-key="created_by_user" style="flex-grow:1"> 
+                      Final Destination
                     </vs-th>
                     <vs-th  sort-key="created_by_department" style="flex-grow:1"> 
                       From Dep
@@ -142,7 +152,7 @@
                   </div>
 
                   <div slot-scope="{data}">
-                    <vs-tr :state="tr.role == 'Super Admin'?'success':tr.role == 'Admin'?'primary':null" :key="indextr" v-for="(tr, indextr) in data" class="grid grid-cols-8 gap-4 custom-color">
+                    <vs-tr :state="tr.role == 'Super Admin'?'success':tr.role == 'Admin'?'primary':null" :key="indextr" v-for="(tr, indextr) in data" class="grid grid-cols-9 gap-4 custom-color">
                       <vs-td :data="data[indextr]._id">
                         {{data[indextr]._id}}
                       </vs-td>
@@ -152,6 +162,9 @@
 
                       <vs-td :data="tr.created_by_user">
                         {{tr.created_by_user}}
+                      </vs-td>
+                      <vs-td :data="tr.final_user">
+                        {{ final_user }}
                       </vs-td>
 
                       <vs-td :data="tr.created_by_department">
@@ -193,7 +206,7 @@
                   </div>
                 </div>
                 <vs-table :max-items="selectedEntry" search pagination :data="all_documents_pending">
-                  <div slot="thead" class="grid grid-cols-8 gap-4 custom text-3xl">
+                  <div slot="thead" class="grid grid-cols-9 gap-4 custom text-3xl">
                     <vs-th sort-key="_id" style="flex-grow:1">
                       Document ID
                     </vs-th>
@@ -202,6 +215,9 @@
                     </vs-th>
                     <vs-th sort-key="created_by_user" style="flex-grow:1"> 
                       Created By
+                    </vs-th>
+                    <vs-th sort-key="created_by_user" style="flex-grow:1"> 
+                      Final Destination
                     </vs-th>
                     <vs-th  sort-key="created_by_department" style="flex-grow:1"> 
                       From Dep
@@ -221,7 +237,7 @@
                   </div>
 
                   <div slot-scope="{data}">
-                    <vs-tr :state="tr.role == 'Super Admin'?'success':tr.role == 'Admin'?'primary':null" :key="indextr" v-for="(tr, indextr) in data" class="grid grid-cols-8 gap-4 custom-color">
+                    <vs-tr :state="tr.role == 'Super Admin'?'success':tr.role == 'Admin'?'primary':null" :key="indextr" v-for="(tr, indextr) in data" class="grid grid-cols-9 gap-4 custom-color">
                       <vs-td :data="data[indextr]._id">
                         {{data[indextr]._id}}
                       </vs-td>
@@ -231,6 +247,10 @@
 
                       <vs-td :data="tr.created_by_user">
                         {{tr.created_by_user}}
+                      </vs-td>
+
+                      <vs-td :data="tr.final_user">
+                        {{ tr.final_user }}
                       </vs-td>
 
                       <vs-td :data="tr.created_by_department">
@@ -354,6 +374,20 @@
               </div>
             </div>
             <div>
+            <b-form-group
+              class="text-xl"
+              id="fnl_dsc"
+              label="Final Destination"
+              label-for="fnl_dsc"
+              description="Name of the final target person."
+            >
+            <b-form-select
+                id="fnl_dsc"
+                v-model="fnl_dsc"
+                :options="users"
+                required
+              ></b-form-select>
+            </b-form-group>
             <b-form-textarea
               id="textarea"
               v-model="dsc"
@@ -393,6 +427,7 @@ data:()=>({
     frmUser: "",
     frmDep: "",
     targetUser: "",
+    fnl_dsc:"",
     targetDep: "",
     dsc: "",
     departments: [],
@@ -459,6 +494,17 @@ data:()=>({
       document.getElementById("docID").value = x;
     },
     onSubmit: async function() {
+      var objToday = new Date(),
+                weekday = new Array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'),
+                dayOfWeek = weekday[objToday.getDay()],
+                domEnder = function() { var a = objToday; if (/1/.test(parseInt((a + "").charAt(0)))) return "th"; a = parseInt((a + "").charAt(1)); return 1 == a ? "st" : 2 == a ? "nd" : 3 == a ? "rd" : "th" }(),
+                dayOfMonth = today + ( objToday.getDate() < 10) ? '0' + objToday.getDate() + domEnder : objToday.getDate() + domEnder,
+                months = new Array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'),
+                curMonth = months[objToday.getMonth()],
+                curYear = objToday.getFullYear()
+
+      var today = String(dayOfWeek + " " + dayOfMonth + " of " + curMonth + ", " + curYear)
+
       var newDocument = {
         _id: this.docID,
         title: this.title,
@@ -466,8 +512,10 @@ data:()=>({
         created_by_uname: this.payloadUname,
         created_by_department: this.frmDep,
         target_user: this.targetUser,
+        final_user: this.fnl_dsc,
         target_department: this.targetDep,
         description: this.dsc,
+        date: today
       }
       this.all_documents.push(newDocument)
       this.popupActivo = false

@@ -6,7 +6,8 @@
               <div>
                 <vs-button @click="addUpdate" style="border-radius:5px;" color="primary" type="filled">Add Update</vs-button>
               </div>
-              <div v-show="this.$store.state.isCreator">
+              <div> 
+              <!-- v-show="this.$store.state.isCreator"> -->
                 <vs-checkbox style="float:right; margin-top: .5em" color="success" v-model="checkBox">Add document to completed</vs-checkbox>
               </div>
           </div>
